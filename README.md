@@ -1,12 +1,31 @@
-# AI Finance SaaS
+# AI Finance SaaS 💰🤖
 
-AI-powered expense & budget SaaS with Free/Pro plans, Stripe subscriptions, OCR uploads, PDF/Excel reports, AI insights, and chatbot.
+AI-powered expense & budget management SaaS with Free/Pro plans, Stripe subscriptions, OCR receipt uploads, automated PDF/Excel reports, AI financial insights, and an integrated chatbot.
 
-## Quickstart
-- Copy `.env.example` to `.env` in backend & frontend
-- `cd backend && npm i && npm run dev`
-- `cd frontend && npm i && npm run dev`
-- Open `http://localhost:5173`
+---
 
-## Deploy
-See `docs/DEPLOYMENT.md`.
+## 🚀 Features
+- 🔐 Authentication & Role-based Access (Free / Pro plans)
+- 💳 Stripe Subscriptions for Pro users
+- 📊 Expense Tracking & Reports (PDF/Excel)
+- 🧾 OCR Receipt Upload & Processing
+- 🤖 AI Insights & Chatbot Assistant
+- 🔔 Real-time Notifications
+- 🌐 Dockerized for easy deployment
+
+---
+
+## 🛠️ Tech Stack
+**Frontend:** React (Vite)  
+**Backend:** Node.js (Express, MongoDB, JWT, Stripe)  
+**AI/OCR:** Custom AI utils + OCR Processing  
+**Deployment:** Docker & Docker Compose  
+
+---
+
+## ⚡ Quickstart
+
+### 1️⃣ Clone the repo
+```bash
+git clone https://github.com/akshayverma3685/ai-finance-saas.git
+cd ai-finance-saas
