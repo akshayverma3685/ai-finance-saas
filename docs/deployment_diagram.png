@@ -1,1 +1,8 @@
+# 📊 Deployment Diagram
 
+```mermaid
+graph TD
+  A[Frontend - Vercel] -->|API Calls| B[Backend - Render/Railway]
+  B --> C[(MongoDB Atlas)]
+  B --> D[(Stripe API)]
+  B --> E[(OpenAI API)]
