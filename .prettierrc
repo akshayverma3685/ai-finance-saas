@@ -1,6 +1,6 @@
 {
-  "semi": true,              // har line ke end me semicolon lagega
-  "singleQuote": false,      // hamesha double quote " " use honge
-  "trailingComma": "es5",    // arrays/objects me trailing comma lagega
-  "printWidth": 100          // ek line max 100 chars hogi
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "es5",
+  "printWidth": 100
 }
