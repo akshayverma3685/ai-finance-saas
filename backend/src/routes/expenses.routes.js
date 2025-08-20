@@ -1,1 +1,10 @@
-
+import express from "express";
+import auth from "../middlewares/auth.middleware.js";
+import { createExpense, listExpenses, updateExpense, deleteExpense } from "../controllers/expense.controller.js";
+const router = express.Router();
+router.use(auth);
+router.get("/", listExpenses);
+router.post("/", createExpense);
+router.put("/:id", updateExpense);
+router.delete("/:id", deleteExpense);
+export default router;
