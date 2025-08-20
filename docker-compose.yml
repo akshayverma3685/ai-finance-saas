@@ -1,1 +1,32 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    container_name: finance_backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
 
+  frontend:
+    build: ./frontend
+    container_name: finance_frontend
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:5
+    container_name: finance_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
