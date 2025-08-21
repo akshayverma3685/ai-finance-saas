@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Reports from "./pages/Reports.jsx";
 import Upgrade from "./pages/Upgrade.jsx";
 import Billing from "./pages/Billing.jsx";
+import Analytics from "./pages/analytics.jsx";
 
 export default function App(){
   const [token, setToken] = useState(localStorage.getItem("token"));
