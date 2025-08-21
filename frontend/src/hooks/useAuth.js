@@ -1,19 +1,13 @@
-// frontend/src/hooks/useAuth.js
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import AuthProvider from "./context/AuthProvider";
+import Main from "./Main";
 
-export default function useAuth() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-        .then((res) => setUser(res.data.user))
-        .catch(() => setUser(null));
-    }
-  }, []);
-
-  return user;
+function App() {
+  return (
+    <AuthProvider>
+      <Main />
+    </AuthProvider>
+  );
 }
+
+export default App;
