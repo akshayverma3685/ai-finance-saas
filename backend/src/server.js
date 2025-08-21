@@ -14,6 +14,10 @@ import chatbotRoutes from "./routes/chatbot.routes.js";
 import stripeRoutes from "./routes/stripe.routes.js";
 import stripeWebhookRoute from "./routes/stripe.webhook.js";
 
+// ✅ NEW Routes
+import analyticsRoutes from "./routes/analytics.routes.js";
+import notificationRoutes from "./routes/notifications.routes.js";
+
 dotenv.config();
 connectDB();
 
@@ -41,6 +45,10 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/stripe", stripeRoutes);
+
+// ✅ NEW APIs
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
