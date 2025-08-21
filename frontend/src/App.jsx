@@ -10,27 +10,47 @@ import Analytics from "./pages/Analytics.jsx";
 import Notifications from "./pages/Notifications.jsx";
 import Settings from "./pages/Settings.jsx";
 
-export default function App(){
+export default function App() {
+  // token check
   const [token, setToken] = useState(localStorage.getItem("token"));
-  function onAuth(t){ localStorage.setItem("token", t); setToken(t); }
-  function logout(){ localStorage.removeItem("token"); setToken(null); }
+
+  function onAuth(t) {
+    localStorage.setItem("token", t);
+    setToken(t);
+  }
+  function logout() {
+    localStorage.removeItem("token");
+    setToken(null);
+  }
 
   return (
-    <div>
-      <nav style={{display:"flex", gap:12, padding:12, borderBottom:"1px solid #eee"}}>
-        <Link to="/">Dashboard</Link>
+    <div className="min-h-screen bg-gray-50">
+      {/* 🔹 Navbar */}
+      <nav className="flex gap-4 p-4 border-b bg-white shadow-sm">
+        <Link to="/" className="text-blue-600 font-medium">Dashboard</Link>
         <Link to="/reports">Reports</Link>
         <Link to="/upgrade">Upgrade</Link>
         <Link to="/billing">Billing</Link>
         <Link to="/analytics">Analytics</Link>
         <Link to="/notifications">Notifications</Link>
         <Link to="/settings">Settings</Link>
-        {token ? <button onClick={logout}>Logout</button> : <>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Signup</Link>
-        </>}
+        
+        <div className="ml-auto">
+          {token ? (
+            <button onClick={logout} className="px-3 py-1 bg-red-500 text-white rounded">
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="px-3 py-1 bg-blue-500 text-white rounded mr-2">Login</Link>
+              <Link to="/signup" className="px-3 py-1 bg-green-500 text-white rounded">Signup</Link>
+            </>
+          )}
+        </div>
       </nav>
-      <div style={{ padding: 16 }}>
+
+      {/* 🔹 Page Content */}
+      <main className="p-6">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<Login onLogin={onAuth} />} />
@@ -42,7 +62,7 @@ export default function App(){
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
-      </div>
+      </main>
     </div>
   );
-}
+    }
