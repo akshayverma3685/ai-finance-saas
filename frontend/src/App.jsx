@@ -1,35 +1,75 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
-// ✅ Pages import
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
-import Upgrade from "./pages/Upgrade";
+// Pages
+import Login from "./pages/login";
+import Signup from "./pages/signup";
+import Dashboard from "./pages/dashboard";
+import Upgrade from "./pages/upgrade";
 
-// ✅ Pro features (agar tumne banaye hai to)
+// Pro features
 import OCRUpload from "./features/ocr/OCRUpload";
-import Notifications from "./features/notifications/Notifications";
 import Reports from "./features/reports/Reports";
+import Notifications from "./features/notifications/Notifications";
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      {/* Auth routes */}
-      <Route path="/" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+    <AuthProvider>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-      {/* User dashboard */}
-      <Route path="/dashboard" element={<Dashboard />} />
+        {/* Auth Required */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Pro Upgrade */}
-      <Route path="/upgrade" element={<Upgrade />} />
+        {/* Upgrade */}
+        <Route
+          path="/upgrade"
+          element={
+            <ProtectedRoute>
+              <Upgrade />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Pro Features */}
-      <Route path="/ocr" element={<OCRUpload />} />
-      <Route path="/notifications" element={<Notifications />} />
-      <Route path="/reports" element={<Reports />} />
-    </Routes>
+        {/* PRO routes */}
+        <Route
+          path="/ocr"
+          element={
+            <ProtectedRoute requirePro>
+              <OCRUpload />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute requirePro>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute requirePro>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
   );
 }
-
-export default App;
