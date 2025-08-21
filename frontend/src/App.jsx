@@ -7,6 +7,8 @@ import Reports from "./pages/Reports.jsx";
 import Upgrade from "./pages/Upgrade.jsx";
 import Billing from "./pages/Billing.jsx";
 import Analytics from "./pages/Analytics.jsx";
+import Notifications from "./pages/Notifications.jsx";
+import Settings from "./pages/Settings.jsx";
 
 export default function App(){
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -20,6 +22,9 @@ export default function App(){
         <Link to="/reports">Reports</Link>
         <Link to="/upgrade">Upgrade</Link>
         <Link to="/billing">Billing</Link>
+        <Link to="/analytics">Analytics</Link>
+        <Link to="/notifications">Notifications</Link>
+        <Link to="/settings">Settings</Link>
         {token ? <button onClick={logout}>Logout</button> : <>
           <Link to="/login">Login</Link>
           <Link to="/signup">Signup</Link>
@@ -33,8 +38,11 @@ export default function App(){
           <Route path="/reports" element={<Reports />} />
           <Route path="/upgrade" element={<Upgrade />} />
           <Route path="/billing" element={<Billing />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </div>
   );
-          }
+}
