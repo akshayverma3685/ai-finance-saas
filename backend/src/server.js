@@ -4,11 +4,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 
+// ✅ Import routes
 import authRoutes from "./routes/auth.routes.js";
-import expenseRoutes from "./routes/expenses.routes.js";   // ✅ plural
+import expenseRoutes from "./routes/expenses.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 import reportRoutes from "./routes/report.routes.js";
-import uploadRoutes from "./routes/upload.routes.js";      // ✅ spelling fix
+import uploadRoutes from "./routes/upload.routes.js";
 import chatbotRoutes from "./routes/chatbot.routes.js";
 import stripeRoutes from "./routes/stripe.routes.js";
 import stripeWebhookRoute from "./routes/stripe.webhook.js";
@@ -18,15 +19,21 @@ connectDB();
 
 const app = express();
 
-// Middlewares
+// ✅ Middleware
 app.use(cors());
-app.use(express.json());
 app.use(cookieParser());
 
-// Webhook (placed before express.json for Stripe signature validation)
-app.use("/api/stripe/webhook", stripeWebhookRoute);
+// ⚡️ Stripe webhook ko sabse pehle raw body chahiye
+app.use(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhookRoute
+);
 
-// Routes
+// ✅ JSON parser baad me lagao (normal APIs ke liye)
+app.use(express.json());
+
+// ✅ API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/ai", aiRoutes);
