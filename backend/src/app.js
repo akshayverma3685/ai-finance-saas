@@ -15,6 +15,7 @@ import uploadRoutes from './routes/upload.routes.js'
 import analyticsRoutes from './routes/analytics.routes.js'
 import aiRoutes from './routes/ai.routes.js'
 import notificationRoutes from './routes/notification.routes.js'
+import adminRoutes from "./routes/admin.routes.js"
 
 // Payments (normal + webhook)
 import paymentRoutes, { paymentWebhookRouter } from './routes/payment.routes.js'
@@ -42,6 +43,7 @@ app.use('/api/payments', paymentRoutes)        // normal user flows
 app.use('/api/payments', paymentWebhookRouter) // webhook (signature verification)
 app.use('/api/ai', aiRoutes)
 app.use('/api/notifications', notificationRoutes)
+app.use("/api/admin", adminRoutes)
 
 // Error handlers
 app.use(notFound)
