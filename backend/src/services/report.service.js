@@ -1,21 +1,54 @@
 import Expense from '../models/Expense.js'
 import Report from '../models/Report.js'
 
-export const generateMonthlyReport = async (userId, month) => {
-  const [y, m] = month.split('-').map(Number)
-  const start = new Date(y, m - 1, 1)
-  const end = new Date(y, m, 1)
-  const expenses = await Expense.find({ user: userId, date: { $gte: start, $lt: end } })
-  const breakdown = {}
-  let total = 0
-  for (const e of expenses) {
-    breakdown[e.category] = (breakdown[e.category] || 0) + e.amount
-    total += e.amount
-  }
-  const report = await Report.findOneAndUpdate(
-    { user: userId, month },
-    { user: userId, month, total, breakdown },
-    { upsert: true, new: true }
-  )
+/**
+ * Generate or fetch a monthly report
+ * @param {ObjectId} userId
+ * @param {String} month - format: YYYY-MM
+ */
+export const generateReport = async (userId, month) => {
+  // First check if report already exists
+  let report = await Report.findOne({ user: userId, month })
+  if (report) return report
+
+  // Parse month into date range
+  const [year, mon] = month.split('-').map(Number)
+  const startDate = new Date(year, mon - 1, 1)
+  const endDate = new Date(year, mon, 0, 23, 59, 59)
+
+  // Aggregate expenses
+  const expenses = await Expense.aggregate([
+    {
+      $match: {
+        user: userId,
+        date: { $gte: startDate, $lte: endDate }
+      }
+    },
+    {
+      $group: {
+        _id: '$category',
+        total: { $sum: '$amount' },
+        count: { $sum: 1 }
+      }
+    }
+  ])
+
+  const total = expenses.reduce((sum, e) => sum + e.total, 0)
+
+  // Save report
+  report = await Report.create({
+    user: userId,
+    month,
+    total,
+    breakdown: expenses
+  })
+
   return report
+}
+
+/**
+ * List all reports of a user
+ */
+export const listReports = async (userId) => {
+  return await Report.find({ user: userId }).sort({ month: -1 })
 }
