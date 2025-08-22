@@ -1,37 +1,80 @@
-import { useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import { createCheckoutSession } from "../../utils/api";
+import React from "react";
 
-export default function Upgrade() {
-  const [loading, setLoading] = useState(false);
-  const PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_ID || ""; // <-- set in .env
+const UpgradePage = () => {
+  const handlePayment = async (type) => {
+    let endpoint = "";
+    if (type === "lifetime") endpoint = "/api/payments/create-order";
+    if (type === "monthly") endpoint = "/api/payments/create-monthly-subscription";
+    if (type === "yearly") endpoint = "/api/payments/create-yearly-subscription";
 
-  const goPro = async () => {
-    if (!PRICE_ID) { alert("Stripe price ID missing"); return; }
-    setLoading(true);
-    try {
-      const { url } = await createCheckoutSession(PRICE_ID);
-      window.location.href = url;
-    } catch (e) {
-      alert(e?.response?.data?.message || "Failed to create checkout session");
-    } finally { setLoading(false); }
+    const res = await fetch(endpoint, { method: "POST" });
+    const data = await res.json();
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: data.amount,
+      currency: "INR",
+      name: "AI Finance SaaS",
+      description: `${type.toUpperCase()} Plan`,
+      order_id: data.id || undefined,
+      subscription_id: data.id || undefined,
+      handler: function (response) {
+        alert("Payment successful!");
+        // TODO: call backend to activate Pro plan for this user
+      },
+      prefill: {
+        email: "user@example.com",
+        contact: "9999999999",
+      },
+      theme: { color: "#4f46e5" },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   return (
-    <DashboardLayout>
-      <div className="bg-white rounded-2xl p-6 shadow-sm border max-w-2xl">
-        <h1 className="text-2xl font-semibold mb-2">Upgrade to Pro</h1>
-        <p className="text-gray-600 mb-4">Unlock AI insights, OCR receipt scan, smart notifications, and exportable reports.</p>
-        <ul className="list-disc ml-6 text-sm text-gray-700 space-y-1 mb-6">
-          <li>AI-powered budgeting & category suggestions</li>
-          <li>Smart alerts for overspending & bill reminders</li>
-          <li>Reports export (PDF/Excel) + email scheduling</li>
-          <li>Unlimited history & priority support</li>
-        </ul>
-        <button onClick={goPro} disabled={loading} className="px-5 py-2 rounded-lg bg-black text-white">
-          {loading ? "Redirecting..." : "Go Pro – Checkout"}
+    <div className="max-w-3xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Monthly */}
+      <div className="p-6 bg-white rounded-2xl shadow-lg text-center">
+        <h2 className="text-xl font-bold">Monthly</h2>
+        <p className="text-2xl font-semibold mt-2">₹499</p>
+        <p className="text-gray-500">per month</p>
+        <button
+          className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg"
+          onClick={() => handlePayment("monthly")}
+        >
+          Subscribe
         </button>
       </div>
-    </DashboardLayout>
+
+      {/* Yearly */}
+      <div className="p-6 bg-white rounded-2xl shadow-lg text-center border-2 border-indigo-600">
+        <h2 className="text-xl font-bold">Yearly</h2>
+        <p className="text-2xl font-semibold mt-2">₹4999</p>
+        <p className="text-gray-500">per year</p>
+        <button
+          className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg"
+          onClick={() => handlePayment("yearly")}
+        >
+          Subscribe
+        </button>
+      </div>
+
+      {/* Lifetime */}
+      <div className="p-6 bg-white rounded-2xl shadow-lg text-center">
+        <h2 className="text-xl font-bold">Lifetime</h2>
+        <p className="text-2xl font-semibold mt-2">₹9999</p>
+        <p className="text-gray-500">one-time</p>
+        <button
+          className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg"
+          onClick={() => handlePayment("lifetime")}
+        >
+          Buy Once
+        </button>
+      </div>
+    </div>
   );
-}
+};
+
+export default UpgradePage;
