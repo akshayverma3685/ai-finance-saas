@@ -1,14 +1,22 @@
+// src/utils/fetchClient.js
 import axios from "axios";
-import { getToken } from "./auth";
 
+// Base URL env file se uthao
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+  withCredentials: true, // cookies, JWT tokens ke liye agar zarurat ho
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-client.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+// Agar response me error aaye to handle karo
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API Error:", error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 export default client;
