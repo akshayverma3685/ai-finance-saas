@@ -1,0 +1,63 @@
+datasource db {
+  provider = "postgresql" // ya mysql/sqlite jo use kar rahe ho
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  name          String?
+  avatarUrl     String?   // optional profile pic
+  plan          Plan      @default(FREE)
+  razorpayId    String?   // Razorpay customer ID
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // relations
+  expenses      Expense[]
+  notifications Notification[]
+  reports       Report[]
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  amount      Float
+  category    String
+  note        String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  message   String
+  type      String   // info | alert | reminder
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  month     Int
+  year      Int
+  fileUrl   String   // stored PDF/CSV link
+  createdAt DateTime @default(now())
+}
+
+enum Plan {
+  FREE
+  PRO_MONTHLY
+  PRO_YEARLY
+  PRO_LIFETIME
+}
