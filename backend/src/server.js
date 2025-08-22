@@ -16,7 +16,6 @@ import expensesRoutes from "./routes/expenses.routes.js";
 import notificationsRoutes from "./routes/notifications.routes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import reportRoutes from "./routes/report.routes.js";
-import stripeRoutes from "./routes/stripe.routes.js";
 import stripeWebhook from "./routes/stripe.webhook.js";
 import uploadRoutes from "./routes/upload.routes.js";
 
@@ -42,7 +41,6 @@ app.use("/api/expenses", expensesRoutes);
 app.use("/api/notifications", notificationsRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/reports", reportRoutes);
-app.use("/api/stripe", stripeRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // Error handling middleware
