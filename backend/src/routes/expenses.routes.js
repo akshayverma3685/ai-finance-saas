@@ -1,10 +1,11 @@
-import express from "express";
-import auth from "../middlewares/auth.middleware.js";
-import { createExpense, listExpenses, updateExpense, deleteExpense } from "../controllers/expense.controller.js";
-const router = express.Router();
-router.use(auth);
-router.get("/", listExpenses);
-router.post("/", createExpense);
-router.put("/:id", updateExpense);
-router.delete("/:id", deleteExpense);
-export default router;
+import { Router } from 'express'
+import { body } from 'express-validator'
+import { auth } from '../middlewares/auth.middleware.js'
+import { listCtrl, createCtrl, deleteCtrl } from '../controllers/expense.controller.js'
+
+const r = Router()
+r.use(auth)
+r.get('/', listCtrl)
+r.post('/', body('title').notEmpty(), body('amount').isNumeric(), createCtrl)
+r.delete('/:id', deleteCtrl)
+export default r
