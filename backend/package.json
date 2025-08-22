@@ -28,7 +28,8 @@
     "pino": "^9.0.0",
     "pino-pretty": "^11.2.2",
     "razorpay": "^2.9.3",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "openai": "^4.57.0"
   },
   "devDependencies": {
     "eslint": "^9.8.0",
