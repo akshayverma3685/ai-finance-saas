@@ -1,24 +1,21 @@
-// backend/src/analytics/analyticsController.js
-import Expense from "../models/Expense.js";
+import { getDashboardStats, getDetailedReport } from './analytics.service.js'
+import { ok } from '../utils/apiResponse.js'
 
-// 📊 Monthly analytics summary
-export const getMonthlyAnalytics = async (req, res) => {
+export const dashboardCtrl = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const expenses = await Expense.find({ userId });
-
-    // Group by category
-    const categoryTotals = {};
-    expenses.forEach((exp) => {
-      categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + exp.amount;
-    });
-
-    res.json({
-      totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
-      categoryTotals,
-      transactionCount: expenses.length,
-    });
+    const stats = await getDashboardStats(req.user._id)
+    return ok(res, { stats })
   } catch (err) {
-    res.status(500).json({ message: "Error fetching analytics" });
+    next(err)
   }
-};
+}
+
+export const detailedReportCtrl = async (req, res, next) => {
+  try {
+    const { month } = req.params
+    const report = await getDetailedReport(req.user._id, month)
+    return ok(res, { report })
+  } catch (err) {
+    next(err)
+  }
+}
