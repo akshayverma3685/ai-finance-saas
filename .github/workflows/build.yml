@@ -2,9 +2,10 @@ name: build
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: # Manual run option
 
 jobs:
   build:
@@ -19,14 +20,18 @@ jobs:
         with:
           node-version: 18
 
+      # Backend dependencies
       - name: Install backend dependencies
         run: npm ci --prefix backend
 
+      # Frontend dependencies
       - name: Install frontend dependencies
-        run: npm install --prefix frontend
+        run: npm ci --prefix frontend
 
+      # Build backend (dummy build will run)
       - name: Build backend
         run: npm run build --prefix backend
 
+      # Build frontend
       - name: Build frontend
         run: npm run build --prefix frontend
