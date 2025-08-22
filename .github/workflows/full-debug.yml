@@ -1,0 +1,61 @@
+name: Full Debug (Backend + Frontend)
+
+on:
+  workflow_dispatch: # manually run karne ke liye
+  push:
+    branches: [ "main" ]
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # =====================
+      # Backend
+      # =====================
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Run Backend Lint
+        working-directory: backend
+        run: npm run lint || true
+
+      - name: Run Backend Build
+        working-directory: backend
+        run: npm run build || true
+
+      - name: Run Backend Dev (10s logs)
+        working-directory: backend
+        run: |
+          npm run dev &   
+          sleep 10        
+
+      # =====================
+      # Frontend
+      # =====================
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run Frontend Lint
+        working-directory: frontend
+        run: npm run lint -- --no-inline-config || true
+
+      - name: Run Frontend Build
+        working-directory: frontend
+        run: npm run build || true
+
+      - name: Run Frontend Dev (20s logs)
+        working-directory: frontend
+        run: |
+          npm run dev &
+          sleep 20
