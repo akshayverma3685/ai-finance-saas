@@ -1,19 +1,52 @@
-- name: Install backend dependencies
-  run: |
-    cd backend
-    npm install
+name: Build and Test
 
-- name: Build backend
-  run: |
-    cd backend
-    npm run build
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
-- name: Install frontend dependencies
-  run: |
-    cd frontend
-    npm install
+permissions:
+  contents: read
 
-- name: Build frontend
-  run: |
-    cd frontend
-    npm run build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # ========================
+      # Backend
+      # ========================
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
+
+      # ========================
+      # Frontend
+      # ========================
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
