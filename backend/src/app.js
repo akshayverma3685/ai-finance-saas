@@ -3,6 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import routes from "./routes/index.js"
 import './config/index.js'
 
 import { errorHandler, notFound } from './middlewares/error.middleware.js'
@@ -44,6 +45,7 @@ app.use('/api/payments', paymentWebhookRouter) // webhook (signature verificatio
 app.use('/api/ai', aiRoutes)
 app.use('/api/notifications', notificationRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/api", routes)
 
 // Error handlers
 app.use(notFound)
