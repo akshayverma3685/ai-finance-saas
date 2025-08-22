@@ -1,0 +1,45 @@
+name: Frontend Debug CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  debug-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Repo checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      # Step 4: Run ESLint (show warnings + errors)
+      - name: Run ESLint
+        working-directory: frontend
+        run: npm run lint -- --no-inline-config || true
+
+      # Step 5: Try Next.js build (show errors but don't stop workflow)
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build || true
+
+      # Step 6: Run Next.js in dev mode (just for logs, timeout after 20s)
+      - name: Run frontend dev server (debug mode)
+        working-directory: frontend
+        run: |
+          npm run dev & sleep 20
+          killall node || true
