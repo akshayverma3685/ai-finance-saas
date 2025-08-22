@@ -1,62 +1,19 @@
-name: build
+- name: Install backend dependencies
+  run: |
+    cd backend
+    npm install
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch: # manual trigger option
+- name: Build backend
+  run: |
+    cd backend
+    npm run build
 
-permissions:
-  contents: write
-  
-jobs:
-  build:
-    runs-on: ubuntu-latest
+- name: Install frontend dependencies
+  run: |
+    cd frontend
+    npm install
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      # ========================
-      # Backend
-      # ========================
-      - name: Install backend dependencies
-        run: npm ci --prefix backend
-
-      - name: Build backend
-        run: npm run build --prefix backend
-
-      # ========================
-      # Frontend
-      # ========================
-      - name: Try frontend install with npm ci
-        id: frontend-ci
-        run: |
-          set -e
-          cd frontend
-          npm ci || echo "lockfile-error" > ../frontend-ci-failed
-
-      - name: Fix lockfile if npm ci failed
-        if: success() && hashFiles('frontend-ci-failed') != ''
-        run: |
-          echo "npm ci failed → running npm install to regenerate lock file"
-          cd frontend
-          rm -rf node_modules package-lock.json
-          npm install
-          cd ..
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/package-lock.json
-          git commit -m "chore: auto-regenerate frontend lock file" || echo "No lockfile changes"
-          git push
-
-      - name: Build frontend
-        run: npm run build --prefix frontend
+- name: Build frontend
+  run: |
+    cd frontend
+    npm run build
