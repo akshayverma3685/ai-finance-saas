@@ -16,7 +16,8 @@ module.exports = {
   plugins: ["react"],
   rules: {
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off"   // ✅ Next.js ke liye zaruri
   },
   settings: {
     react: {
