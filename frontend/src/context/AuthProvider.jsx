@@ -10,24 +10,31 @@ export function AuthProvider({ children }) {
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // bootstrap
+  // bootstrap auth state on mount
   useEffect(() => {
     (async () => {
-      const tok = getToken();
-      if (!tok) { setLoading(false); return; }
+      const token = getToken();
+      if (!token) {
+        setLoading(false);
+        return;
+      }
       try {
         const me = await getMe();
         setUser(me.user);
         setIsPro(!!me.user?.isPro);
-      } catch {}
-      finally { setLoading(false); }
+      } catch (err) {
+        console.error("Auth bootstrap failed:", err);
+        clearToken(); // bad token remove
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
   const login = async (email, password) => {
     const data = await loginApi(email, password);
     setToken(data.token);
-    setUser({ name: data.name, email: data.email, _id: data._id });
+    setUser(data.user || { name: data.name, email: data.email, _id: data._id });
     setIsPro(!!data.isPro);
     return data;
   };
@@ -35,16 +42,25 @@ export function AuthProvider({ children }) {
   const signup = async (payload) => {
     const data = await signupApi(payload);
     setToken(data.token);
-    setUser({ name: data.name, email: data.email, _id: data._id });
+    setUser(data.user || { name: data.name, email: data.email, _id: data._id });
     setIsPro(!!data.isPro);
     return data;
   };
 
-  const logout = () => { clearToken(); setUser(null); setIsPro(false); };
+  const logout = () => {
+    clearToken();
+    setUser(null);
+    setIsPro(false);
+  };
 
-  const value = useMemo(() => ({
-    user, isPro, login, signup, logout, loading
-  }), [user, isPro, loading]);
+  const value = useMemo(
+    () => ({ user, isPro, login, signup, logout, loading }),
+    [user, isPro, loading]
+  );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
