@@ -1,11 +1,29 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
 import { auth } from '../middlewares/auth.middleware.js'
-import { listCtrl, createCtrl, deleteCtrl } from '../controllers/expense.controller.js'
+import {
+  listExpensesCtrl,
+  createExpenseCtrl,
+  getExpenseCtrl,
+  updateExpenseCtrl,
+  deleteExpenseCtrl
+} from '../controllers/expense.controller.js'
 
 const r = Router()
 r.use(auth)
-r.get('/', listCtrl)
-r.post('/', body('title').notEmpty(), body('amount').isNumeric(), createCtrl)
-r.delete('/:id', deleteCtrl)
+
+// GET all expenses
+r.get('/', listExpensesCtrl)
+
+// POST new expense
+r.post('/', createExpenseCtrl)
+
+// GET single expense
+r.get('/:id', getExpenseCtrl)
+
+// PATCH update expense
+r.patch('/:id', updateExpenseCtrl)
+
+// DELETE expense
+r.delete('/:id', deleteExpenseCtrl)
+
 export default r
