@@ -1,6 +1,6 @@
 import React from "react";
 
-const upgrade = () => {
+const Upgrade = () => {
   const handlePayment = async (type) => {
     let endpoint = "";
     if (type === "lifetime") endpoint = "/api/payments/create-order";
@@ -18,7 +18,7 @@ const upgrade = () => {
       description: `${type.toUpperCase()} Plan`,
       order_id: data.id || undefined,
       subscription_id: data.id || undefined,
-      handler: function (response) {
+      handler: function (_response) {   // 👈 unused param ko `_response` banaya
         alert("Payment successful!");
         // TODO: call backend to activate Pro plan for this user
       },
@@ -77,4 +77,4 @@ const upgrade = () => {
   );
 };
 
-export default upgrade;
+export default Upgrade;
