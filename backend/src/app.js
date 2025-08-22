@@ -12,6 +12,7 @@ import uploadRoutes from './routes/upload.routes.js'
 import analyticsRoutes from './routes/analytics.routes.js'
 import paymentRoutes from './routes/payment.routes.js'
 import aiRoutes from './routes/ai.routes.js'
+import notificationRoutes from './routes/notification.routes.js'
 
 const app = express()
 app.use(helmet())
@@ -30,6 +31,7 @@ app.use('/api/upload', uploadRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/ai', aiRoutes)
+app.use('/api/notifications', notificationRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
