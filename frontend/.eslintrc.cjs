@@ -7,7 +7,8 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "next/core-web-vitals"   // 👈 Next.js ke liye add karo
   ],
   parserOptions: {
     ecmaVersion: "latest",
@@ -17,7 +18,7 @@ module.exports = {
   rules: {
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off"   // ✅ Next.js ke liye zaruri
+    "react/react-in-jsx-scope": "off"   // 👈 isse error band ho jayega
   },
   settings: {
     react: {
