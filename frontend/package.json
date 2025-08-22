@@ -15,7 +15,8 @@
     "recharts": "^2.12.7",
     "react-router-dom": "^6.26.2",
     "js-cookie": "^3.0.5",
-    "lucide-react": "^0.428.0"
+    "lucide-react": "^0.428.0",
+    "axios": "^1.7.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",
