@@ -1,6 +1,6 @@
 import React from "react";
 
-const UpgradePage = () => {
+const upgrade = () => {
   const handlePayment = async (type) => {
     let endpoint = "";
     if (type === "lifetime") endpoint = "/api/payments/create-order";
@@ -77,4 +77,4 @@ const UpgradePage = () => {
   );
 };
 
-export default UpgradePage;
+export default upgrade;
