@@ -1,29 +1,54 @@
-// Simple service to calculate analytics on expenses
-const Expense = require("../models/Expense");
+import Expense from '../models/Expense.js'
+import Report from '../models/Report.js'
 
-async function getMonthlySummary(userId) {
-  const expenses = await Expense.find({ user: userId });
-  const grouped = {};
+/**
+ * Get dashboard stats (total expenses, categories, monthly trend)
+ */
+export const getDashboardStats = async (userId) => {
+  // Total spend
+  const totalSpend = await Expense.aggregate([
+    { $match: { user: userId } },
+    { $group: { _id: null, total: { $sum: '$amount' } } }
+  ])
 
-  expenses.forEach(exp => {
-    const month = exp.date.toISOString().slice(0, 7); // YYYY-MM
-    if (!grouped[month]) grouped[month] = 0;
-    grouped[month] += exp.amount;
-  });
+  // Spend by category
+  const byCategory = await Expense.aggregate([
+    { $match: { user: userId } },
+    { $group: { _id: '$category', total: { $sum: '$amount' } } },
+    { $sort: { total: -1 } }
+  ])
 
-  return grouped;
+  // Monthly trend (last 6 months)
+  const monthlyTrend = await Expense.aggregate([
+    { $match: { user: userId } },
+    {
+      $group: {
+        _id: { year: { $year: '$date' }, month: { $month: '$date' } },
+        total: { $sum: '$amount' }
+      }
+    },
+    { $sort: { '_id.year': -1, '_id.month': -1 } },
+    { $limit: 6 }
+  ])
+
+  // Latest 5 expenses
+  const recentExpenses = await Expense.find({ user: userId })
+    .sort({ date: -1 })
+    .limit(5)
+    .select('title amount category date')
+
+  return {
+    totalSpend: totalSpend[0]?.total || 0,
+    byCategory,
+    monthlyTrend,
+    recentExpenses
+  }
 }
 
-async function getCategoryBreakdown(userId) {
-  const expenses = await Expense.find({ user: userId });
-  const breakdown = {};
-
-  expenses.forEach(exp => {
-    if (!breakdown[exp.category]) breakdown[exp.category] = 0;
-    breakdown[exp.category] += exp.amount;
-  });
-
-  return breakdown;
+/**
+ * Get detailed analytics report from Reports collection
+ */
+export const getDetailedReport = async (userId, month) => {
+  const report = await Report.findOne({ user: userId, month })
+  return report || { month, expenses: [], total: 0 }
 }
-
-module.exports = { getMonthlySummary, getCategoryBreakdown };
