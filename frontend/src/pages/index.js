@@ -1,7 +1,9 @@
 // src/pages/index.js
+
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Link from "next/link"; // ✅ Import Link
 
 export default function Home() {
   const router = useRouter();
@@ -39,20 +41,20 @@ export default function Home() {
       </div>
 
       {/* Extra Links */}
-      <div className="mt-8 text-gray-500">
-        <a href="/dashboard" className="mr-4 hover:underline">
+      <div className="mt-8 text-gray-500 space-x-4">
+        <Link href="/dashboard" className="hover:underline">
           Dashboard
-        </a>
-        <a href="/billing" className="mr-4 hover:underline">
+        </Link>
+        <Link href="/billing" className="hover:underline">
           Billing
-        </a>
-        <a href="/reports" className="mr-4 hover:underline">
+        </Link>
+        <Link href="/reports" className="hover:underline">
           Reports
-        </a>
-        <a href="/settings" className="hover:underline">
+        </Link>
+        <Link href="/settings" className="hover:underline">
           Settings
-        </a>
+        </Link>
       </div>
     </div>
   );
-            }
+        }
