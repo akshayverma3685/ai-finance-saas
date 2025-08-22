@@ -1,7 +1,14 @@
 import { Router } from 'express'
 import { auth } from '../middlewares/auth.middleware.js'
-import { generateCtrl } from '../controllers/report.controller.js'
+import { generateReportCtrl, listReportsCtrl } from '../controllers/report.controller.js'
+
 const r = Router()
 r.use(auth)
-r.post('/:month', generateCtrl) // YYYY-MM
+
+// Get all reports
+r.get('/', listReportsCtrl)
+
+// Generate or get report for a specific month
+r.post('/:month', generateReportCtrl)
+
 export default r
