@@ -1,10 +1,14 @@
-// backend/src/analytics/analyticsRoutes.js
-import express from "express";
-import { getMonthlyAnalytics } from "./analyticsController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { Router } from 'express'
+import { auth } from '../middlewares/auth.middleware.js'
+import { dashboardCtrl, detailedReportCtrl } from './analytics.controller.js'
 
-const router = express.Router();
+const router = Router()
+router.use(auth)
 
-router.get("/monthly", authMiddleware, getMonthlyAnalytics);
+// Dashboard analytics → frontend Dashboard.jsx
+router.get('/dashboard', dashboardCtrl)
 
-export default router;
+// Detailed monthly report → frontend Reports.jsx
+router.get('/report/:month', detailedReportCtrl)
+
+export default router
