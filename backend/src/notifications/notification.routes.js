@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { authMiddleware } = require("../middleware/auth");
 const notificationController = require("./notification.controller");
 
-router.post("/budget-alert", authMiddleware, notificationController.sendBudgetAlert);
+router.post("/", notificationController.createNotification);
+router.get("/", notificationController.getNotifications);
+router.patch("/:id/read", notificationController.markAsRead);
 
 module.exports = router;
