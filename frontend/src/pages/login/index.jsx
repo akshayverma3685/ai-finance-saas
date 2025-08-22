@@ -1,6 +1,6 @@
 // frontend/src/pages/Login.jsx
 import React, { useState } from "react";
-import api from "../utils/api.js";
+import api from "@/utils/api.js";
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState("");
