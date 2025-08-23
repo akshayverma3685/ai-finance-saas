@@ -1,7 +1,6 @@
 // Simple request logger middleware (custom morgan alternative if needed)
 const loggerMiddleware = (req, res, next) => {
   const start = Date.now();
-
   res.on("finish", () => {
     const duration = Date.now() - start;
     console.log(
