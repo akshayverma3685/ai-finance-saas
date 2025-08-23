@@ -5,3 +5,5 @@ export const rateLimiter = rateLimit({
   max: 100, // limit each IP
   message: { success: false, message: 'Too many requests, please try again later.' },
 })
+
+export default rateLimiter
