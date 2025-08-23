@@ -1,83 +1,79 @@
-// frontend/src/pages/Login.jsx
-import React, { useState } from "react";
-import api from "@/utils/api.js";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { loginApi, signupApi } from "@/utils/api";
 
-export default function Login({ onLogin }) {
+export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  async function submit(e) {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErr(null);
+    setError("");
     try {
-      const r = await api.post("/auth/login", { email, password });
-      if (r.data?.token) {
-        onLogin(r.data.token);
-      } else {
-        setErr("No token received from server.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setErr(error.response?.data?.error || "Login failed");
+      await loginApi(email, password);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Invalid credentials");
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  const handleSignup = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await signupApi({ email, password });
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Sign In
-        </h2>
-
-        {err && (
-          <div className="bg-red-100 text-red-600 p-3 mb-4 rounded-lg text-sm">
-            {err}
-          </div>
-        )}
-
-        <form onSubmit={submit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
+    <div className="flex items-center justify-center h-screen">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white shadow-lg p-6 rounded-lg w-80"
+      >
+        <h2 className="text-xl font-bold mb-4">Login</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border w-full p-2 mb-3 rounded"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border w-full p-2 mb-3 rounded"
+        />
+        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 text-white w-full p-2 rounded mb-2"
+        >
+          {loading ? "Loading..." : "Login"}
+        </button>
+        <button
+          type="button"
+          onClick={handleSignup}
+          disabled={loading}
+          className="bg-gray-600 text-white w-full p-2 rounded"
+        >
+          {loading ? "Loading..." : "Signup"}
+        </button>
+      </form>
     </div>
   );
 }
