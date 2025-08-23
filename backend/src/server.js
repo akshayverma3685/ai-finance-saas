@@ -1,10 +1,30 @@
-// server.js
+// src/server.js
 import http from "http";
+import mongoose from "mongoose";   // ✅ Mongoose import kiya
 import app from "./app.js";
 import config from "./config/index.js";
 
 // ✅ Create HTTP server
 const server = http.createServer(app);
+
+// ✅ Connect MongoDB before starting server
+const connectDB = async () => {
+  try {
+    await mongoose.connect(config.mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB Connected");
+
+    // Start server only after DB connection
+    server.listen(config.port, () => {
+      console.log(`🚀 Server running on http://localhost:${config.port} [${config.env}]`);
+    });
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+    process.exit(1);
+  }
+};
 
 // ✅ Graceful shutdown handler
 const shutdown = (signal) => {
@@ -17,11 +37,6 @@ const shutdown = (signal) => {
   });
 };
 
-// Start server
-server.listen(config.port, () => {
-  console.log(`🚀 Server running on http://localhost:${config.port} [${config.env}]`);
-});
-
 // Handle crashes & signals
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
@@ -33,3 +48,6 @@ process.on("unhandledRejection", (reason) => {
   console.error("❌ Unhandled Rejection:", reason);
   shutdown("unhandledRejection");
 });
+
+// ✅ Start app
+connectDB();
