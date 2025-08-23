@@ -17,3 +17,5 @@ export const auth = async (req, res, next) => {
     return unauthorized(res, 'Invalid or expired token')
   }
 }
+
+export default authMiddleware
