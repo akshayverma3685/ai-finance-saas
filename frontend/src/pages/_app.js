@@ -1,5 +1,10 @@
 // src/pages/_app.js
-import "@/styles/globals.css";   // Tailwind CSS import
+import "../styles/globals.css"
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+// Tailwind CSS import
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
