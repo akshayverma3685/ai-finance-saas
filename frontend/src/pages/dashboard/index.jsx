@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
+import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react";
 
 export default function DashboardPage() {
   const [expenses, setExpenses] = useState([]);
@@ -9,14 +10,13 @@ export default function DashboardPage() {
   const [newExpense, setNewExpense] = useState({ title: "", amount: "" });
   const [error, setError] = useState("");
 
-  // Load expenses on mount
+  // Load expenses
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
         const data = await api.getExpenses();
         setExpenses(data || []);
       } catch (err) {
-        console.error("Failed to fetch expenses:", err);
         setError("Failed to load expenses.");
       } finally {
         setLoading(false);
@@ -25,12 +25,12 @@ export default function DashboardPage() {
     fetchExpenses();
   }, []);
 
-  // Handle form input
+  // Form change
   const handleChange = (e) => {
     setNewExpense({ ...newExpense, [e.target.name]: e.target.value });
   };
 
-  // Add new expense
+  // Add expense
   const handleAddExpense = async (e) => {
     e.preventDefault();
     if (!newExpense.title || !newExpense.amount) return;
@@ -40,35 +40,68 @@ export default function DashboardPage() {
       const added = await api.addExpense(newExpense);
       setExpenses([...expenses, added]);
       setNewExpense({ title: "", amount: "" });
-    } catch (err) {
-      console.error("Failed to add expense:", err);
+    } catch {
       setError("Failed to add expense.");
     } finally {
       setAdding(false);
     }
   };
 
-  // Fetch AI insights
+  // AI insights
   const handleGetInsights = async () => {
     try {
       const res = await api.getAiInsights(expenses);
       setInsights(res);
-    } catch (err) {
-      console.error("Failed to get insights:", err);
+    } catch {
       setError("Failed to get AI insights.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+    <div className="min-h-screen bg-gray-50 p-8 space-y-8">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
 
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {/* 🔹 Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-2xl shadow-md flex items-center gap-4">
+          <DollarSign className="w-8 h-8 text-green-600" />
+          <div>
+            <p className="text-sm text-gray-500">Revenue</p>
+            <h3 className="text-xl font-bold">₹1,20,000</h3>
+          </div>
+        </div>
 
-      {/* Add Expense Form */}
+        <div className="bg-white p-6 rounded-2xl shadow-md flex items-center gap-4">
+          <Users className="w-8 h-8 text-blue-600" />
+          <div>
+            <p className="text-sm text-gray-500">Users</p>
+            <h3 className="text-xl font-bold">850</h3>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-md flex items-center gap-4">
+          <TrendingUp className="w-8 h-8 text-purple-600" />
+          <div>
+            <p className="text-sm text-gray-500">Growth</p>
+            <h3 className="text-xl font-bold">+12%</h3>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-md flex items-center gap-4">
+          <BarChart className="w-8 h-8 text-orange-600" />
+          <div>
+            <p className="text-sm text-gray-500">Reports</p>
+            <h3 className="text-xl font-bold">32</h3>
+          </div>
+        </div>
+      </div>
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* 🔹 Add Expense Form */}
       <form
         onSubmit={handleAddExpense}
-        className="mb-6 bg-white p-4 rounded-2xl shadow-md flex gap-4"
+        className="bg-white p-4 rounded-2xl shadow-md flex gap-4"
       >
         <input
           type="text"
@@ -97,8 +130,8 @@ export default function DashboardPage() {
         </button>
       </form>
 
-      {/* Expenses List */}
-      <div className="bg-white p-4 rounded-2xl shadow-md mb-6">
+      {/* 🔹 Expenses List */}
+      <div className="bg-white p-4 rounded-2xl shadow-md">
         <h2 className="text-xl font-semibold mb-4">Your Expenses</h2>
         {loading ? (
           <p>Loading...</p>
@@ -116,7 +149,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* AI Insights */}
+      {/* 🔹 AI Insights */}
       <div className="bg-white p-4 rounded-2xl shadow-md">
         <h2 className="text-xl font-semibold mb-4">AI Insights</h2>
         <button
@@ -127,7 +160,9 @@ export default function DashboardPage() {
         </button>
         {insights && (
           <div className="text-gray-800">
-            <pre className="whitespace-pre-wrap">{JSON.stringify(insights, null, 2)}</pre>
+            <pre className="whitespace-pre-wrap">
+              {JSON.stringify(insights, null, 2)}
+            </pre>
           </div>
         )}
       </div>
