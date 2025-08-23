@@ -1,33 +1,26 @@
-import { Router } from "express"
+// src/routes/index.js
+import { Router } from "express";
+import { readdirSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-// Import all route modules
-import authRoutes from "./auth.routes.js"
-import expenseRoutes from "./expense.routes.js"
-import ocrRoutes from "./ocr.routes.js"
-import notificationRoutes from "./notification.routes.js"
-import analyticsRoutes from "./analytics.routes.js"
-import billingRoutes from "./billing.routes.js"
-import aiRoutes from "./ai.routes.js"
-import adminRoutes from "./admin.routes.js"
-import chatbotRoutes from "./chatbot.routes.js"
-import paymentRoutes from "./payment.routes.js"
-import reportRoutes from "./report.routes.js"
-import uploadRoutes from "./upload.routes.js"
+const router = Router();
 
-const router = Router()
+// __dirname fix (ESM me __dirname nahi hota)
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const routesPath = join(__dirname);
 
-// Mount routes
-router.use("/auth", authRoutes)
-router.use("/expenses", expenseRoutes)
-router.use("/ocr", ocrRoutes)
-router.use("/notifications", notificationRoutes)
-router.use("/analytics", analyticsRoutes)
-router.use("/billing", billingRoutes)
-router.use("/ai", aiRoutes)
-router.use("/admin", adminRoutes)
-router.use("/chatbot", chatbotRoutes)
-router.use("/payment", paymentRoutes)
-router.use("/report", reportRoutes)
-router.use("/upload", uploadRoutes)
+// Sare .routes.js files ko read karo
+readdirSync(routesPath).forEach((file) => {
+  if (file.endsWith(".routes.js")) {
+    const routeName = file.replace(".routes.js", ""); // e.g. auth.routes.js → auth
 
-export default router
+    // Dynamic import
+    import(`./${file}`).then((routeModule) => {
+      router.use(`/${routeName}`, routeModule.default);
+      console.log(`✅ Loaded route: /${routeName}`);
+    });
+  }
+});
+
+export default router;
