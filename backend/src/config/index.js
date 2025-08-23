@@ -10,46 +10,44 @@ function required(key, defaultValue) {
   return value;
 }
 
-// ✅ Config object
 const config = {
+  // App
   env: required("NODE_ENV", "development"),
   port: required("PORT", 5000),
-
-  // Security
-  jwt: {
-    secret: required("JWT_SECRET"),
-    expiresIn: required("JWT_EXPIRES_IN", "7d"),
-  },
   cookieSecret: required("COOKIE_SECRET"),
 
   // Database
   db: {
-    url: process.env.DATABASE_URL || process.env.MONGO_URI,
+    uri: required("MONGODB_URI"),
+    name: required("DB_NAME", "ai_finance_saas"),
   },
 
-  // Payments
-  stripe: {
-    secretKey: process.env.STRIPE_SECRET_KEY,
-    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-  },
-  paypal: {
-    clientId: process.env.PAYPAL_CLIENT_ID,
-    clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+  // JWT
+  jwt: {
+    secret: required("JWT_SECRET"),
+    expiresIn: required("JWT_EXPIRES_IN", "7d"),
   },
 
-  // Cloudinary
-  cloudinary: {
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    apiSecret: process.env.CLOUDINARY_API_SECRET,
+  // Razorpay
+  razorpay: {
+    keyId: required("RAZORPAY_KEY_ID"),
+    keySecret: required("RAZORPAY_KEY_SECRET"),
+    planMonthly: process.env.RAZORPAY_PLAN_MONTHLY,
+    planYearly: process.env.RAZORPAY_PLAN_YEARLY,
   },
 
-  // AI
+  // OpenAI
   openai: {
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: required("OPENAI_API_KEY"),
   },
 
-  // Email
+  // Admin
+  admin: {
+    email: required("ADMIN_EMAIL"),
+    password: required("ADMIN_PASSWORD"),
+  },
+
+  // Mail
   smtp: {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -58,21 +56,6 @@ const config = {
   },
   sendgrid: {
     apiKey: process.env.SENDGRID_API_KEY,
-  },
-
-  // OCR
-  ocr: {
-    apiKey: process.env.OCR_API_KEY,
-  },
-
-  // Monitoring / Analytics
-  sentry: {
-    dsn: process.env.SENTRY_DSN,
-  },
-
-  // App
-  app: {
-    frontendUrl: process.env.FRONTEND_URL,
   },
 };
 
