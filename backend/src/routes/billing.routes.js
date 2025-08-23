@@ -1,13 +1,10 @@
-// backend/src/billing/billing.routes.js
 import express from "express";
-import { createCheckoutSession, webhookHandler } from "./billing.controller.js";
+import { createBillingRecord, getUserBillingHistory, getBillingByInvoice } from "../controllers/billing.controller.js";
 
 const router = express.Router();
 
-// Create checkout session
-router.post("/create-checkout-session", createCheckoutSession);
-
-// Stripe webhook
-router.post("/webhook", express.raw({ type: "application/json" }), webhookHandler);
+router.post("/", createBillingRecord);              // नया billing record बनाना
+router.get("/user/:userId", getUserBillingHistory); // user का पूरा billing history
+router.get("/invoice/:invoiceNumber", getBillingByInvoice); // invoice से fetch करना
 
 export default router;
