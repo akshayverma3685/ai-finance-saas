@@ -18,6 +18,8 @@ import aiRoutes from "./routes/ai.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import ocrRoutes from "./routes/ocr.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import billingRoutes from "./routes/billing.routes.js";
+import chatbotRoutes from "./routes/chatbot.routes.js";
 
 // Payments (normal + webhook)
 import paymentRoutes, {
@@ -48,6 +50,8 @@ app.use("/api/payments", paymentWebhookRouter); // webhook (signature verificati
 app.use("/api/ai", aiRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/billing", billingRoutes)
+app.use("/api/chatbot", chatbotRoutes)
 
 // ✅ OCR route added here
 app.use("/api/ocr", ocrRoutes);
