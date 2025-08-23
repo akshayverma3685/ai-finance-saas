@@ -1,38 +1,79 @@
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-// Load .env
-dotenv.config()
+dotenv.config();
 
-const required = (key) => {
-  if (!process.env[key]) {
-    throw new Error(`❌ Missing required env variable: ${key}`)
+function required(key, defaultValue) {
+  const value = process.env[key] || defaultValue;
+  if (value === undefined) {
+    throw new Error(`❌ Missing required env variable: ${key}`);
   }
-  return process.env[key]
+  return value;
 }
 
-export const config = {
-  env: process.env.NODE_ENV || "development",
-  port: process.env.PORT || 5000,
+// ✅ Config object
+const config = {
+  env: required("NODE_ENV", "development"),
+  port: required("PORT", 5000),
 
-  // MongoDB
-  mongoUri: required("MONGO_URI"),
+  // Security
+  jwt: {
+    secret: required("JWT_SECRET"),
+    expiresIn: required("JWT_EXPIRES_IN", "7d"),
+  },
+  cookieSecret: required("COOKIE_SECRET"),
 
-  // JWT
-  jwtSecret: required("JWT_SECRET"),
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
-
-  // Razorpay
-  razorpay: {
-    keyId: required("RAZORPAY_KEY_ID"),
-    keySecret: required("RAZORPAY_KEY_SECRET"),
-    planMonthly: process.env.RAZORPAY_PLAN_MONTHLY,
-    planYearly: process.env.RAZORPAY_PLAN_YEARLY,
-    webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || null,
+  // Database
+  db: {
+    url: process.env.DATABASE_URL || process.env.MONGO_URI,
   },
 
-  // OpenAI
+  // Payments
+  stripe: {
+    secretKey: process.env.STRIPE_SECRET_KEY,
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+  },
+  paypal: {
+    clientId: process.env.PAYPAL_CLIENT_ID,
+    clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+  },
+
+  // Cloudinary
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+  },
+
+  // AI
   openai: {
-    apiKey: required("OPENAI_API_KEY"),
-    model: process.env.OPENAI_MODEL || "gpt-4o-mini"
-  }
-      }
+    apiKey: process.env.OPENAI_API_KEY,
+  },
+
+  // Email
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  sendgrid: {
+    apiKey: process.env.SENDGRID_API_KEY,
+  },
+
+  // OCR
+  ocr: {
+    apiKey: process.env.OCR_API_KEY,
+  },
+
+  // Monitoring / Analytics
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+  },
+
+  // App
+  app: {
+    frontendUrl: process.env.FRONTEND_URL,
+  },
+};
+
+export default config;
