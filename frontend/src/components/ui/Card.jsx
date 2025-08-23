@@ -1,5 +1,5 @@
 // src/components/ui/Card.jsx
-import { Card as ShadCard, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card as ShadCard, CardHeader, CardTitle, CardContent } from "@/components/ui/Card"
 
 export default function Card({ title, value, icon: Icon }) {
   return (
