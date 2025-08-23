@@ -24,6 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+// 🏠 Root Route
+app.get("/", (req, res) => {
+  res.send("🚀 AI Finance SaaS Backend is running!");
+});
+
 // 🩺 Healthcheck
 app.get("/health", (req, res) => res.json({ ok: true }));
 
