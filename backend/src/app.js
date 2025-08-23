@@ -16,6 +16,7 @@ import uploadRoutes from './routes/upload.routes.js'
 import analyticsRoutes from './routes/analytics.routes.js'
 import aiRoutes from './routes/ai.routes.js'
 import notificationRoutes from './routes/notification.routes.js'
+import ocrRoutes from './routes/ocr.routes.js'
 import adminRoutes from "./routes/admin.routes.js"
 
 // Payments (normal + webhook)
@@ -46,6 +47,7 @@ app.use('/api/ai', aiRoutes)
 app.use('/api/notifications', notificationRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api", routes)
+app.use("/api/ocr", ocrRoutes)
 
 // Error handlers
 app.use(notFound)
