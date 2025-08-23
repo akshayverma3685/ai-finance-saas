@@ -1,6 +1,12 @@
-export const isAdmin = (req, res, next) => {
+// backend/src/middlewares/admin.middleware.js
+
+const adminMiddleware = (req, res, next) => {
   if (!req.user || req.user.role !== "admin") {
-    return res.status(403).json({ success: false, message: "Forbidden: Admins only" })
+    return res
+      .status(403)
+      .json({ success: false, message: "Forbidden: Admins only" })
   }
   next()
 }
+
+export default adminMiddleware
