@@ -25,9 +25,9 @@ router.use("/analytics", analyticsRoutes)
 router.use("/billing", billingRoutes)
 router.use("/ai", aiRoutes)
 router.use("/admin", adminRoutes)
-router.use("chatbot", chatbotRoutes)
-router.use("payment", paymentRoutes)
-router.use("report", reportRoutes)
-router.use("upload", uploadRoutes)
+router.use("/chatbot", chatbotRoutes)
+router.use("/payment", paymentRoutes)
+router.use("/report", reportRoutes)
+router.use("/upload", uploadRoutes)
 
 export default router
