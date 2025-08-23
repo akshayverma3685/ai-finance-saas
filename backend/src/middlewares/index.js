@@ -1,6 +1,7 @@
 export { auth } from './auth.middleware.js'
 export { isAdmin } from './admin.middleware.js'
 export { errorHandler } from './error.middleware.js'
+export { notFound } from './notFound.middleware.js'
 export { logger } from './logger.middleware.js'
 export { rateLimiter } from './rateLimit.middleware.js'
 export { validate } from './validate.middleware.js'
