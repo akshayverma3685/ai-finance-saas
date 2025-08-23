@@ -3,10 +3,14 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+
 import routes from "./routes/index.js";
 import "./config/index.js";
 
-import { errorHandler, notFound } from "./middlewares/error.middleware.js";
+import {
+  errorMiddleware,
+  notFound,
+} from "./middlewares/index.js"; // ✅ index se import
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -21,7 +25,7 @@ import adminRoutes from "./routes/admin.routes.js";
 import billingRoutes from "./routes/billing.routes.js";
 import chatbotRoutes from "./routes/chatbot.routes.js";
 
-// Payments (normal + webhook)
+// Payments
 import paymentRoutes, {
   paymentWebhookRouter,
 } from "./routes/payment.routes.js";
@@ -45,22 +49,20 @@ app.use("/api/expenses", expenseRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
-app.use("/api/payments", paymentRoutes); // normal user flows
-app.use("/api/payments", paymentWebhookRouter); // webhook (signature verification)
+app.use("/api/payments", paymentRoutes);
+app.use("/api/payments/webhook", paymentWebhookRouter); // ✅ fixed path
 app.use("/api/ai", aiRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/billing", billingRoutes)
-app.use("/api/chatbot", chatbotRoutes)
-
-// ✅ OCR route added here
+app.use("/api/billing", billingRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/ocr", ocrRoutes);
 
-// ✅ Index routes (generic aggregator)
+// ✅ Index routes (aggregator)
 app.use("/api", routes);
 
 // Error handlers
 app.use(notFound);
-app.use(errorHandler);
+app.use(errorMiddleware);
 
 export default app;
