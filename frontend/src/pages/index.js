@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import Link from "next/link"; 
-import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react"; // ✅ Icons
-import { Card, CardContent } from "@/components/ui/Card"; // ✅ Card component
+import Link from "next/link";
+import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react"; 
+import { Card, CardContent } from "@/components/ui/card"; // ✅ lowercase "card"
 
 export default function Home() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
-      router.replace("/dashboard"); 
+      router.replace("/dashboard");
     }
   }, [router]);
 
@@ -41,7 +41,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Stats Section (✅ Card.jsx icons used here) */}
+      {/* Stats Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 w-full max-w-5xl">
         <Card>
           <CardContent className="flex items-center space-x-4">
