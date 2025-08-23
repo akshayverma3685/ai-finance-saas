@@ -7,12 +7,19 @@ import cookieParser from "cookie-parser";
 import routes from "./routes/index.js";
 import "./config/index.js";
 
+// ✅ Middlewares sab index.js se import
 import {
-  errorMiddleware,
+  errorHandler,
   notFound,
-} from "./middlewares/index.js"; // ✅ index se import
+  authMiddleware,
+  adminMiddleware,
+  proMiddleware,
+  loggerMiddleware,
+  validateMiddleware,
+  rateLimitMiddleware,
+} from "./middlewares/index.js";
 
-// Routes
+// ✅ Individual feature routes
 import authRoutes from "./routes/auth.routes.js";
 import expenseRoutes from "./routes/expense.routes.js";
 import reportRoutes from "./routes/report.routes.js";
@@ -25,20 +32,24 @@ import adminRoutes from "./routes/admin.routes.js";
 import billingRoutes from "./routes/billing.routes.js";
 import chatbotRoutes from "./routes/chatbot.routes.js";
 
-// Payments
+// ✅ Payments
 import paymentRoutes, {
   paymentWebhookRouter,
 } from "./routes/payment.routes.js";
 
 const app = express();
 
-// Security & Middlewares
+// Security & Global Middlewares
 app.use(helmet());
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+// Example of custom middlewares if needed
+// app.use(loggerMiddleware);
+// app.use(rateLimitMiddleware);
 
 // Healthcheck
 app.get("/health", (req, res) => res.json({ ok: true }));
@@ -50,7 +61,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/payments/webhook", paymentWebhookRouter); // ✅ fixed path
+app.use("/api/payments/webhook", paymentWebhookRouter); // ✅ fixed webhook path
 app.use("/api/ai", aiRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
@@ -58,11 +69,11 @@ app.use("/api/billing", billingRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/ocr", ocrRoutes);
 
-// ✅ Index routes (aggregator)
+// ✅ Aggregated routes (from routes/index.js)
 app.use("/api", routes);
 
-// Error handlers
+// Error handlers (last)
 app.use(notFound);
-app.use(errorMiddleware);
+app.use(errorHandler);
 
 export default app;
