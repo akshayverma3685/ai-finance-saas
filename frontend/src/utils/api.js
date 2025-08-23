@@ -1,21 +1,37 @@
-import client from "./fetchClient";
+import axios from "axios";
 
-export const loginApi   = (email, password) => client.post("/auth/login", { email, password }).then(r=>r.data);
-export const signupApi  = (payload) => client.post("/auth/register", payload).then(r=>r.data);
-export const getMe      = () => client.get("/auth/me").then(r=>r.data);
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api", // fallback
+});
 
-export const getExpenses   = () => client.get("/expenses").then(r=>r.data);
-export const addExpense    = (payload) => client.post("/expenses", payload).then(r=>r.data);
+api.interceptors.request.use((config) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-export const getAiInsights = (expenses) => client.post("/ai/insights", { expenses }).then(r=>r.data);
+// --- API FUNCTIONS ---
 
-export const createCheckoutSession = (priceId) =>
-  client.post("/stripe/checkout", { priceId }).then(r=>r.data);
-
-export const getReportPdf = async () =>
-  client.get("/reports/download", { responseType: "blob" }).then(r=>r.data);
-
+// Upload receipt (OCR)
 export const uploadReceipt = async (file) => {
-  const form = new FormData(); form.append("file", file);
-  return client.post("/ocr/upload", form, { headers: { "Content-Type": "multipart/form-data" } }).then(r=>r.data);
+  const formData = new FormData();
+  formData.append("receipt", file);
+  const res = await api.post("/ocr/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
 };
+
+// Add new expense
+export const addExpense = async (expenseData) => {
+  const res = await api.post("/expenses", expenseData);
+  return res.data;
+};
+
+// Get all expenses
+export const getExpenses = async () => {
+  const res = await api.get("/expenses");
+  return res.data;
+};
+
+export default api;

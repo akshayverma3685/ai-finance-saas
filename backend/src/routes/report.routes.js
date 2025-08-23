@@ -1,8 +1,14 @@
-import express from "express";
-import auth from "../middlewares/auth.middleware.js";
-import proOnly from "../middlewares/pro.middleware.js";
-import { downloadPdf, downloadExcel } from "../controllers/report.controller.js";
-const router = express.Router();
-router.get("/monthly.pdf", auth, proOnly, downloadPdf);
-router.get("/monthly.xlsx", auth, proOnly, downloadExcel);
-export default router;
+import { Router } from 'express'
+import { auth } from '../middlewares/auth.middleware.js'
+import { generateReportCtrl, listReportsCtrl } from '../controllers/report.controller.js'
+
+const r = Router()
+r.use(auth)
+
+// Get all reports
+r.get('/', listReportsCtrl)
+
+// Generate or get report for a specific month
+r.post('/:month', generateReportCtrl)
+
+export default r

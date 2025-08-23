@@ -1,83 +1,84 @@
-// frontend/src/pages/Login.jsx
-import React, { useState } from "react";
-import api from "@/utils/api.js";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import api from "@/utils/api";
 
-export default function Login({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [err, setErr] = useState(null);
+export default function LoginPage() {
+  const router = useRouter();
+  const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  async function submit(e) {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErr(null);
+    setError("");
+
     try {
-      const r = await api.post("/auth/login", { email, password });
-      if (r.data?.token) {
-        onLogin(r.data.token);
-      } else {
-        setErr("No token received from server.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setErr(error.response?.data?.error || "Login failed");
+      await api.login(form.email, form.password); // <-- login API call
+      router.push("/dashboard"); // redirect to dashboard after login
+    } catch (err) {
+      setError(err?.response?.data?.message || "Login failed. Try again.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Sign In
-        </h2>
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
+      >
+        <h1 className="text-2xl font-bold mb-6 text-center">Log In</h1>
 
-        {err && (
-          <div className="bg-red-100 text-red-600 p-3 mb-4 rounded-lg text-sm">
-            {err}
-          </div>
+        {error && (
+          <p className="text-red-500 text-sm mb-4">{error}</p>
         )}
 
-        <form onSubmit={submit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-6">
+          <label className="block text-sm mb-1">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        >
+          {loading ? "Logging in..." : "Log In"}
+        </button>
+
+        <p className="text-center text-sm mt-4">
+          Don’t have an account?{" "}
+          <Link href="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </form>
     </div>
   );
-}
+          }

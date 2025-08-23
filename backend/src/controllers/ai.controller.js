@@ -1,16 +1,41 @@
-import axios from "axios";
-import Expense from "../models/Expense.js";
+// src/controllers/ai.controller.js
+import { chatbotReply } from "../ai/services/chatbotService.js";
+import { detectFraud } from "../ai/services/fraudDetection.js";
+import { generateRecommendations } from "../ai/services/recommendation.js";
+import { ok } from "../utils/apiResponse.js";
 
-export async function insights(req, res) {
-  const expenses = await Expense.find({ userId: req.user._id }).lean();
-  const prompt = `You are a finance assistant. Analyze these expenses and return 3 insights and 3 savings tips in bullet points. Data: ${JSON.stringify(expenses)}`;
+export const chatCtrl = async (req, res, next) => {
   try {
-    const r = await axios.post("https://api.openai.com/v1/chat/completions", {
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }]
-    }, { headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` } });
-    res.json({ insights: r.data.choices[0].message.content });
-  } catch {
-    res.status(500).json({ error: "AI provider error" });
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: "Message is required" });
+
+    const reply = await chatbotReply(message);
+    return ok(res, { reply });
+  } catch (err) {
+    next(err);
   }
-}
+};
+
+export const fraudCheckCtrl = async (req, res, next) => {
+  try {
+    const { transactions } = req.body;
+    if (!transactions) return res.status(400).json({ error: "Transactions array required" });
+
+    const result = detectFraud(transactions);
+    return ok(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const recommendCtrl = async (req, res, next) => {
+  try {
+    const { expenses } = req.body;
+    if (!expenses) return res.status(400).json({ error: "Expenses array required" });
+
+    const result = generateRecommendations(expenses);
+    return ok(res, result);
+  } catch (err) {
+    next(err);
+  }
+};

@@ -1,7 +1,12 @@
-import express from "express";
-import auth from "../middlewares/auth.middleware.js";
-import proOnly from "../middlewares/pro.middleware.js";
-import { upload, ocrParse } from "../controllers/upload.controller.js";
-const router = express.Router();
-router.post("/receipt", auth, proOnly, upload.single("file"), ocrParse);
-export default router;
+import { Router } from 'express'
+import { auth } from '../middlewares/auth.middleware.js'
+import { uploader } from '../services/upload.service.js'
+import { ocrUploadCtrl } from '../controllers/upload.controller.js'
+
+const r = Router()
+r.use(auth)
+
+// OCR upload (form-data: file)
+r.post('/ocr', uploader.single('file'), ocrUploadCtrl)
+
+export default r

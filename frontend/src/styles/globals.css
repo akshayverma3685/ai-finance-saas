@@ -1,9 +1,7 @@
-/* src/styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Tumhare custom global styles */
 * {
   margin: 0;
   padding: 0;
@@ -11,6 +9,6 @@
 }
 
 body {
+  @apply bg-gray-50 text-gray-900;
   font-family: sans-serif;
-  background: #f9fafb;
 }

@@ -1,25 +1,54 @@
-import Expense from "../models/Expense.js";
+import {
+  createExpense,
+  getExpenses,
+  getExpenseById,
+  updateExpense,
+  deleteExpense
+} from '../services/expense.service.js'
+import { ok, created } from '../utils/apiResponse.js'
 
-export async function createExpense(req, res) {
-  const exp = await Expense.create({ ...req.body, userId: req.user._id });
-  res.json(exp);
+export const listExpensesCtrl = async (req, res, next) => {
+  try {
+    const expenses = await getExpenses(req.user._id)
+    return ok(res, { items: expenses })
+  } catch (err) {
+    next(err)
+  }
 }
-export async function listExpenses(req, res) {
-  const { from, to } = req.query;
-  const q = { userId: req.user._id };
-  if (from || to) q.date = {};
-  if (from) q.date.$gte = new Date(from);
-  if (to) q.date.$lte = new Date(to);
-  const items = await Expense.find(q).sort({ date: -1 });
-  res.json(items);
+
+export const createExpenseCtrl = async (req, res, next) => {
+  try {
+    const exp = await createExpense(req.user._id, req.body)
+    return created(res, { item: exp })
+  } catch (err) {
+    next(err)
+  }
 }
-export async function updateExpense(req, res) {
-  const { id } = req.params;
-  const exp = await Expense.findOneAndUpdate({ _id: id, userId: req.user._id }, req.body, { new: true });
-  res.json(exp);
+
+export const getExpenseCtrl = async (req, res, next) => {
+  try {
+    const exp = await getExpenseById(req.user._id, req.params.id)
+    if (!exp) return res.status(404).json({ error: 'Not found' })
+    return ok(res, { item: exp })
+  } catch (err) {
+    next(err)
+  }
 }
-export async function deleteExpense(req, res) {
-  const { id } = req.params;
-  await Expense.deleteOne({ _id: id, userId: req.user._id });
-  res.json({ success: true });
+
+export const updateExpenseCtrl = async (req, res, next) => {
+  try {
+    const exp = await updateExpense(req.user._id, req.params.id, req.body)
+    return ok(res, { item: exp })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const deleteExpenseCtrl = async (req, res, next) => {
+  try {
+    await deleteExpense(req.user._id, req.params.id)
+    return ok(res, { success: true })
+  } catch (err) {
+    next(err)
+  }
 }

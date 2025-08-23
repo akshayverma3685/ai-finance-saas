@@ -1,7 +1,20 @@
-import express from "express";
-import auth from "../middlewares/auth.middleware.js";
-import proOnly from "../middlewares/pro.middleware.js";
-import { insights } from "../controllers/ai.controller.js";
-const router = express.Router();
-router.post("/insights", auth, proOnly, insights);
+// src/routes/ai.routes.js
+import { Router } from "express";
+import { chatCtrl, fraudCheckCtrl, recommendCtrl } from "../controllers/ai.controller.js";
+import { auth } from "../middlewares/auth.middleware.js";
+
+const router = Router();
+
+// Secure with JWT auth
+router.use(auth);
+
+// Chatbot AI
+router.post("/chat", chatCtrl);
+
+// Fraud detection
+router.post("/fraud-check", fraudCheckCtrl);
+
+// Expense recommendation
+router.post("/recommend", recommendCtrl);
+
 export default router;
