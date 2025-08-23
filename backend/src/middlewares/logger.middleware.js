@@ -1,4 +1,4 @@
-export const logger = (req, _res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`)
+export const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`)
   next()
 }
