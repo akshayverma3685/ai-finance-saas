@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Twitter, Linkedin, Github } from "lucide-react"; // ✅ Icons
 
 export default function Footer() {
   return (
@@ -45,9 +46,15 @@ export default function Footer() {
           <h3 className="text-lg font-semibold text-white mb-3">Get in Touch</h3>
           <p className="text-sm text-gray-400">support@aifinancesaas.com</p>
           <div className="flex space-x-4 mt-3">
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <a href="#" className="hover:text-white transition-colors flex items-center space-x-1">
+              <Twitter className="w-5 h-5" /> <span>Twitter</span>
+            </a>
+            <a href="#" className="hover:text-white transition-colors flex items-center space-x-1">
+              <Linkedin className="w-5 h-5" /> <span>LinkedIn</span>
+            </a>
+            <a href="#" className="hover:text-white transition-colors flex items-center space-x-1">
+              <Github className="w-5 h-5" /> <span>GitHub</span>
+            </a>
           </div>
         </div>
       </div>
@@ -58,4 +65,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+        }
