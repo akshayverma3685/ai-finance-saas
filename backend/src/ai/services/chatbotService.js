@@ -1,27 +1,28 @@
-// backend/src/ai/services/chatbotService.js
-import OpenAI from "openai"
+// src/ai/services/chatbotService.js
+import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // 🔑 from .env
-})
+let openai = null;
+
+// Only initialize if API key is available
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export const chatbotReply = async (message) => {
-  if (!message || typeof message !== "string") {
-    return "❌ Invalid input, please type a valid message."
+  // If no key is set, return fallback response
+  if (!openai) {
+    return "AI chatbot service is disabled in this deployment.";
   }
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // ya gpt-4 agar tumhare paas access hai
-      messages: [
-        { role: "system", content: "You are a helpful financial assistant chatbot." },
-        { role: "user", content: message },
-      ],
-    })
+      model: "gpt-4o-mini", // You can change model later if needed
+      messages: [{ role: "user", content: message }],
+    });
 
-    return response.choices[0].message.content
-  } catch (error) {
-    console.error("OpenAI Error:", error)
-    return "⚠️ Sorry, I’m facing an issue connecting to AI service."
+    return response.choices[0].message.content;
+  } catch (err) {
+    console.error("Chatbot error:", err);
+    return "Error while generating chatbot response.";
   }
-}
+};
