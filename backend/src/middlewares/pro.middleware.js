@@ -4,3 +4,5 @@ export const isPro = (req, res, next) => {
   }
   next()
 }
+
+export default isPro
