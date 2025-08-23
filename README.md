@@ -10,11 +10,6 @@ An **Enterprise-grade Finance SaaS** platform powered by:
 
 ---
 
-## 📂 Project Structure
-
-ai-finance-saas/ │── backend/                # Express.js backend │   ├── src/ │   │   ├── app.js          # Main express app │   │   ├── models/         # Mongoose models │   │   ├── routes/         # API routes │   │   ├── middlewares/    # Custom middlewares │   │   ├── config/         # DB + env config │   │   └── scripts/        # Seeder scripts │   ├── server.js           # Server entry point │   ├── package.json │   └── Dockerfile │ │── frontend/               # Next.js frontend │   ├── src/ │   │   ├── pages/          # Next.js pages │   │   ├── components/     # UI components │   │   ├── layouts/        # Layouts │   │   ├── styles/         # TailwindCSS styles │   │   └── lib/            # Utils │   ├── public/             # Static assets │   ├── package.json │   └── Dockerfile │ ├── README.md               # Project documentation └── docker-compose.yml      # Fullstack container setup (optional)
-
----
 
 ## 🛠️ Tech Stack
 
