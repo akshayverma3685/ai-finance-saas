@@ -1,16 +1,17 @@
-// src/middlewares/index.js
-const auth = require("./auth.middleware");
-const error = require("./error.middleware");
-const logger = require("./logger.middleware");
-const pro = require("./pro.middleware");
-const rateLimit = require("./rateLimit.middleware");
-const validate = require("./validate.middleware");
+import authMiddleware from "./auth.middleware.js";
+import adminMiddleware from "./admin.middleware.js";
+import errorMiddleware from "./error.middleware.js";
+import loggerMiddleware from "./logger.middleware.js";
+import rateLimitMiddleware from "./rateLimit.middleware.js";
+import validateMiddleware from "./validate.middleware.js";
+import proMiddleware from "./pro.middleware.js";
 
-module.exports = {
-  auth,
-  error,
-  logger,
-  pro,
-  rateLimit,
-  validate,
+export {
+  authMiddleware,
+  adminMiddleware,
+  errorMiddleware,
+  loggerMiddleware,
+  rateLimitMiddleware,
+  validateMiddleware,
+  proMiddleware,
 };
