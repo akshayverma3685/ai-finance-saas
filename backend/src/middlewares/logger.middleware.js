@@ -11,4 +11,4 @@ const loggerMiddleware = (req, res, next) => {
   next();
 };
 
-export default loggerMiddleware;
+export default loggerMiddleware
