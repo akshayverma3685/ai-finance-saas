@@ -26,4 +26,4 @@ const proMiddleware = (req, res, next) => {
   }
 };
 
-export default proMiddleware;
+export default proMiddleware
