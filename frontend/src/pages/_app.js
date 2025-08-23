@@ -1,33 +1,14 @@
-// src/pages/_app.jsx
+// src/pages/_app.js
 import "@/styles/globals.css";
-import Script from "next/script";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 
-// Auth Context
-import { AuthProvider } from "@/context/AuthContext";
-
-export default function MyApp({ Component, pageProps }) {
-  const router = useRouter();
-
+function MyApp({ Component, pageProps }) {
+  // Optional: remove React strict warnings in dev OR add global setup here
   useEffect(() => {
-    const handleRouteChange = () => {
-      window.scrollTo(0, 0);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router]);
+    console.log("App mounted ✅");
+  }, []);
 
-  return (
-    <AuthProvider>
-      {/* Razorpay checkout script */}
-      <Script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="afterInteractive"
-      />
-      <Component {...pageProps} />
-    </AuthProvider>
-  );
+  return <Component {...pageProps} />;
 }
+
+export default MyApp;
