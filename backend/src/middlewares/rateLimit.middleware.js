@@ -11,4 +11,4 @@ const rateLimitMiddleware = rateLimit({
   headers: true,
 });
 
-export default rateLimitMiddleware;
+export default rateLimitMiddleware
