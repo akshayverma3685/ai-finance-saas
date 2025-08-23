@@ -1,5 +1,6 @@
 import React from "react";
-import api from "@/utils/api.js";
+import { getData, postData } from
+ '@/utils/api';
 export default function Billing(){
   const openPortal = async ()=>{
     const { data } = await api.post("/stripe/create-portal-session", {});
