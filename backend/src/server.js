@@ -1,8 +1,8 @@
 // server.js
 import http from "http";
-import app from "./src/app.js";
-import config from "./src/config/index.js";
-import mongoose from "./src/config/db.js";
+import app from "./app.js";
+import config from "./config/index.js";
+import mongoose from "./config/db.js";
 
 // ✅ Create HTTP server
 const server = http.createServer(app);
