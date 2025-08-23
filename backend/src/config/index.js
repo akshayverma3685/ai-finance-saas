@@ -18,7 +18,10 @@ const config = {
 
   // Database
   db: {
-    uri: required("MONGODB_URI"),
+    uri: required(
+      "MONGODB_URI",
+      "mongodb+srv://akshayverma3685:uB7VitDzWX1B0QDt@cluster0.yso51fx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    ),
     name: required("DB_NAME", "ai_finance_saas"),
   },
 
