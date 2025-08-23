@@ -1,17 +1,7 @@
-import authMiddleware from "./auth.middleware.js";
-import adminMiddleware from "./admin.middleware.js";
-import errorMiddleware from "./error.middleware.js";
-import loggerMiddleware from "./logger.middleware.js";
-import rateLimitMiddleware from "./rateLimit.middleware.js";
-import validateMiddleware from "./validate.middleware.js";
-import proMiddleware from "./pro.middleware.js";
-
-export {
-  authMiddleware,
-  adminMiddleware,
-  errorMiddleware,
-  loggerMiddleware,
-  rateLimitMiddleware,
-  validateMiddleware,
-  proMiddleware,
-};
+export { auth } from './auth.middleware.js'
+export { isAdmin } from './admin.middleware.js'
+export { errorHandler } from './error.middleware.js'
+export { logger } from './logger.middleware.js'
+export { rateLimiter } from './rateLimit.middleware.js'
+export { validate } from './validate.middleware.js'
+export { isPro } from './pro.middleware.js'
