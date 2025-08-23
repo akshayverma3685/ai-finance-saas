@@ -4,3 +4,5 @@ export const notFound = (req, res, next) => {
     message: `Not Found - ${req.originalUrl}`,
   })
 }
+
+export default notFound
