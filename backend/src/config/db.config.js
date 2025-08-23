@@ -1,17 +1,17 @@
 // src/config/db.js
-import mongoose from 'mongoose'
-import config from './index.js'
+import mongoose from "mongoose";
+import config from "./index.js";
 
-mongoose.set('strictQuery', true)
+mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(config.db.url, {
-    dbName: process.env.DB_NAME || 'ai_finance_saas',
+  .connect(config.mongoURI, {   // 👈 yaha fix: config.mongoURI use karo
+    dbName: config.dbName,      // DB name env se lega
   })
-  .then(() => console.log('✅ MongoDB connected'))
+  .then(() => console.log("✅ MongoDB connected"))
   .catch((e) => {
-    console.error('❌ MongoDB connection error:', e.message)
-    process.exit(1)
-  })
+    console.error("❌ MongoDB connection error:", e.message);
+    process.exit(1);
+  });
 
-export default mongoose
+export default mongoose;
