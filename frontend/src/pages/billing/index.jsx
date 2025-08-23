@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 
 export default function BillingPage() {
-  const [sessionUrl, setSessionUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
