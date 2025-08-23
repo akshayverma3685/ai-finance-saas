@@ -1,79 +1,83 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { loginApi, signupApi } from "@/utils/api";
+import api from "@/utils/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    try {
-      await loginApi(email, password);
-      router.push("/dashboard");
-    } catch (err) {
-      setError("Invalid credentials");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleSignup = async () => {
-    setLoading(true);
-    setError("");
     try {
-      await signupApi({ email, password });
-      router.push("/dashboard");
+      await api.login(form.email, form.password); // <-- login API call
+      router.push("/dashboard"); // redirect to dashboard after login
     } catch (err) {
-      setError("Signup failed");
+      setError(err?.response?.data?.message || "Login failed. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <form
-        onSubmit={handleLogin}
-        className="bg-white shadow-lg p-6 rounded-lg w-80"
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
       >
-        <h2 className="text-xl font-bold mb-4">Login</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border w-full p-2 mb-3 rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border w-full p-2 mb-3 rounded"
-        />
-        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+        <h1 className="text-2xl font-bold mb-6 text-center">Log In</h1>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-4">{error}</p>
+        )}
+
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-sm mb-1">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
+
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white w-full p-2 rounded mb-2"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? "Logging in..." : "Log In"}
         </button>
-        <button
-          type="button"
-          onClick={handleSignup}
-          disabled={loading}
-          className="bg-gray-600 text-white w-full p-2 rounded"
-        >
-          {loading ? "Loading..." : "Signup"}
-        </button>
+
+        <p className="text-center text-sm mt-4">
+          Don’t have an account?{" "}
+          <a href="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </a>
+        </p>
       </form>
     </div>
   );
-}
+          }
