@@ -1,20 +1,7 @@
-// ✅ Validation middleware using express-validator or custom rules
-import { validationResult } from "express-validator";
-
-const validateMiddleware = (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      errors: errors.array().map((err) => ({
-        field: err.param,
-        message: err.msg,
-      })),
-    });
+export const validate = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body)
+  if (error) {
+    return res.status(400).json({ success: false, message: error.details[0].message })
   }
-
-  next();
-};
-
-export default validateMiddleware
+  next()
+}
