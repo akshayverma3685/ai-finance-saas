@@ -1,20 +1,36 @@
-// backend/server.js
-
-import { createServer } from "http";
+// server.js
+import http from "http";
 import app from "./src/app.js";
+import config from "./src/config/index.js";
+import mongoose from "./src/config/db.js";
 
-// Port config
-const PORT = process.env.PORT || 8080;
+// ✅ Create HTTP server
+const server = http.createServer(app);
 
-// Create HTTP server
-const server = createServer(app);
+// ✅ Graceful shutdown handler
+const shutdown = (signal) => {
+  console.log(`\n🛑 ${signal} received. Shutting down gracefully...`);
+  server.close(() => {
+    mongoose.connection.close(false, () => {
+      console.log("✅ MongoDB connection closed.");
+      process.exit(0);
+    });
+  });
+};
 
-// Start listening
-server.listen(PORT, () => {
-  console.log(`🚀 Server is running at http://localhost:${PORT}`);
+// Start server
+server.listen(config.port, () => {
+  console.log(`🚀 Server running on http://localhost:${config.port} [${config.env}]`);
 });
 
-// Optional: handle errors gracefully
-server.on("error", (err) => {
-  console.error("❌ Server error:", err);
+// Handle crashes & signals
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("uncaughtException", (err) => {
+  console.error("❌ Uncaught Exception:", err);
+  shutdown("uncaughtException");
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("❌ Unhandled Rejection:", reason);
+  shutdown("unhandledRejection");
 });
