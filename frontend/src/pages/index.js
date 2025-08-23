@@ -3,24 +3,25 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import Link from "next/link"; // ✅ Import Link
+import Link from "next/link"; 
+import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react"; // ✅ Icons
+import { Card, CardContent } from "@/components/ui/Card"; // ✅ Card component
 
 export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // ✅ Check authentication (JWT stored in cookie)
     const token = Cookies.get("token");
     if (token) {
-      router.replace("/dashboard"); // redirect logged-in users
+      router.replace("/dashboard"); 
     }
   }, [router]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6">
       {/* Hero Section */}
       <h1 className="text-4xl font-bold mb-4">🚀 Welcome to AI Finance SaaS</h1>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-6 text-center max-w-xl">
         Manage your analytics, billing, reports, and more — all in one place.
       </p>
 
@@ -40,8 +41,48 @@ export default function Home() {
         </button>
       </div>
 
+      {/* Stats Section (✅ Card.jsx icons used here) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 w-full max-w-5xl">
+        <Card>
+          <CardContent className="flex items-center space-x-4">
+            <TrendingUp className="h-8 w-8 text-green-500" />
+            <div>
+              <p className="text-xl font-bold">24%</p>
+              <p className="text-gray-500">Growth</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center space-x-4">
+            <Users className="h-8 w-8 text-blue-500" />
+            <div>
+              <p className="text-xl font-bold">1,200+</p>
+              <p className="text-gray-500">Users</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center space-x-4">
+            <DollarSign className="h-8 w-8 text-yellow-500" />
+            <div>
+              <p className="text-xl font-bold">$12k</p>
+              <p className="text-gray-500">Revenue</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center space-x-4">
+            <BarChart className="h-8 w-8 text-purple-500" />
+            <div>
+              <p className="text-xl font-bold">98%</p>
+              <p className="text-gray-500">Accuracy</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Extra Links */}
-      <div className="mt-8 text-gray-500 space-x-4">
+      <div className="mt-12 text-gray-500 space-x-6">
         <Link href="/dashboard" className="hover:underline">
           Dashboard
         </Link>
@@ -57,4 +98,4 @@ export default function Home() {
       </div>
     </div>
   );
-        }
+    }
