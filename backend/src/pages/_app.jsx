@@ -1,6 +1,6 @@
 // src/pages/_app.jsx
-import "@/styles/globals.css"
-import Script from "next/script"
+import "@/styles/globals.css";
+import Script from "next/script";
 
 export default function MyApp({ Component, pageProps }) {
   return (
@@ -12,5 +12,5 @@ export default function MyApp({ Component, pageProps }) {
       />
       <Component {...pageProps} />
     </>
-  )
+  );
 }
