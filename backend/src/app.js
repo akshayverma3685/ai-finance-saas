@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 
 // Load Config (env + db)
 import "./config/index.js";
-import "./config/db.js";
 
 // Middlewares
 import { errorHandler, notFound } from "./middlewares/index.js";
