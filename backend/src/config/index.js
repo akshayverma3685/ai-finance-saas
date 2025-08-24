@@ -1,4 +1,7 @@
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import seedAdmin from "../scripts/seedAdmin.js";
+
 dotenv.config();
 
 function required(key, defaultValue) {
@@ -60,5 +63,17 @@ const config = {
     apiKey: process.env.SENDGRID_API_KEY,
   },
 };
+
+// ✅ MongoDB connect + Seed Admin Auto
+mongoose
+  .connect(config.db.uri, { dbName: config.db.name })
+  .then(async () => {
+    console.log("✅ MongoDB connected");
+    await seedAdmin(); // admin create/update here
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
+  });
 
 export default config;
