@@ -1,5 +1,5 @@
 import React from "react";
-import AuthProvider from "./context/AuthProvider";
+import AuthProvider from "./context/authProvider";
 import Main from "./Main";
 
 function App() {
