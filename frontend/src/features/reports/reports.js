@@ -1,4 +1,4 @@
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/dashboardLayout";
 import { getReportPdf } from "../../utils/api";
 
 export default function Reports() {
