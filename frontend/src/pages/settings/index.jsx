@@ -1,22 +1,28 @@
-// frontend/src/pages/Settings.jsx
-import { useState } from "react";
+import withAuth from "@/utils/withAuth";
+import Layout from "@/components/Layout";
 
-export default function Settings() {
-  const [currency, setCurrency] = useState("USD");
-
+function Settings(){
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Settings</h2>
-      <label className="block mb-2">Preferred Currency:</label>
-      <select
-        className="border p-2 rounded"
-        value={currency}
-        onChange={(e) => setCurrency(e.target.value)}
-      >
-        <option>USD</option>
-        <option>INR</option>
-        <option>EUR</option>
-      </select>
-    </div>
+    <Layout>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="card p-5">
+          <h3 className="text-lg font-semibold">Profile</h3>
+          <div className="mt-4 space-y-3">
+            <input className="input" placeholder="Your name" />
+            <input className="input" placeholder="Email" />
+            <button className="btn btn-primary">Save</button>
+          </div>
+        </div>
+        <div className="card p-5">
+          <h3 className="text-lg font-semibold">Security</h3>
+          <div className="mt-4 space-y-3">
+            <input className="input" type="password" placeholder="New password" />
+            <input className="input" type="password" placeholder="Confirm password" />
+            <button className="btn btn-outline">Update Password</button>
+          </div>
+        </div>
+      </div>
+    </Layout>
   );
 }
+export default withAuth(Settings);
