@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "@/utils/api";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function AdminPage() {
