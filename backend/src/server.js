@@ -3,6 +3,7 @@ import http from "http";
 import mongoose from "mongoose";
 import app from "./app.js";
 import config from "./config/index.js";
+import { createAdmin } from "./utils/createAdmin.js";
 
 const server = http.createServer(app);
 
