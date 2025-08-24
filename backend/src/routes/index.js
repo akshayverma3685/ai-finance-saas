@@ -3,6 +3,7 @@ import { Router } from "express";
 import { readdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import authRoutes from "./auth.routes.js";
 
 const router = Router();
 
