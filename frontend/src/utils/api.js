@@ -1,16 +1,37 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api", // fallback
+  baseURL:
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api", // fallback
 });
 
+// 🔑 Automatically attach token if exists
 api.interceptors.request.use((config) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// --- API FUNCTIONS ---
+// ================== AUTH FUNCTIONS ==================
+
+// ✅ Login API
+api.login = async (email, password) => {
+  const res = await api.post("/auth/login", { email, password });
+
+  // Agar login success hua to token save kar do
+  if (res.data?.data?.token) {
+    localStorage.setItem("token", res.data.data.token);
+  }
+  return res.data;
+};
+
+// ✅ Logout API
+api.logout = () => {
+  localStorage.removeItem("token");
+};
+
+// ================== APP FUNCTIONS ==================
 
 // Upload receipt (OCR)
 export const uploadReceipt = async (file) => {
