@@ -1,75 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import withAuth from "@/utils/withAuth";
+import Layout from "@/components/Layout";
 import api from "@/utils/api";
 
-export default function BillingPage() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+function loadScript(src){
+  return new Promise((resolve)=>{ const s=document.createElement("script"); s.src=src; s.onload=resolve; document.body.appendChild(s); });
+}
 
-  const handleCheckout = async (priceId) => {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await api.createCheckoutSession(priceId);
-      if (res?.url) {
-        window.location.href = res.url; // redirect to Stripe checkout
-      } else {
-        setError("Failed to create checkout session.");
-      }
-    } catch (err) {
-      setError(err?.response?.data?.message || "Checkout failed. Try again.");
-    } finally {
-      setLoading(false);
-    }
+function Billing(){
+  useEffect(()=>{ loadScript("https://checkout.razorpay.com/v1/checkout.js"); },[]);
+
+  const createCheckout = async () => {
+    // Normally: call your backend to create order and return order_id
+    // const { orderId } = await api.post("/payments/create-order", { plan: "monthly" }).then(r=>r.data);
+
+    const rzp = new window.Razorpay({
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: 99900,
+      currency: "INR",
+      name: "AI Finance SaaS",
+      description: "Monthly Pro Plan",
+      handler: function (response) {
+        alert("Payment success: " + response.razorpay_payment_id);
+      },
+      theme: { color: "#3b82f6" },
+    });
+    rzp.open();
   };
 
-  useEffect(() => {
-    // Example: fetch current user subscription status
-    const fetchData = async () => {
-      try {
-        const me = await api.getMe();
-        console.log("User data:", me);
-      } catch (err) {
-        console.error("Error fetching user:", err);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-lg">
-        <h1 className="text-2xl font-bold mb-6 text-center">Billing</h1>
-
-        {error && (
-          <p className="text-red-500 text-sm mb-4">{error}</p>
-        )}
-
-        <div className="space-y-4">
-          <div className="border rounded-lg p-4">
-            <h2 className="text-lg font-semibold">Basic Plan</h2>
-            <p className="text-sm text-gray-600">₹499 / month</p>
-            <button
-              onClick={() => handleCheckout("price_basic_id")}
-              disabled={loading}
-              className="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Redirecting..." : "Subscribe"}
-            </button>
+    <Layout>
+      <div className="card p-6 max-w-2xl">
+        <h2 className="text-xl font-semibold">Upgrade to Pro</h2>
+        <p className="text-slate-400 mt-1">Unlock analytics, reports export, smart alerts and more.</p>
+        <div className="mt-4 flex items-end justify-between">
+          <div>
+            <div className="text-3xl font-semibold">₹999 <span className="text-base text-slate-400">/month</span></div>
+            <ul className="mt-2 text-sm text-slate-300 list-disc pl-5">
+              <li>Unlimited expenses</li>
+              <li>Advanced analytics</li>
+              <li>Email notifications</li>
+            </ul>
           </div>
-
-          <div className="border rounded-lg p-4">
-            <h2 className="text-lg font-semibold">Pro Plan</h2>
-            <p className="text-sm text-gray-600">₹999 / month</p>
-            <button
-              onClick={() => handleCheckout("price_pro_id")}
-              disabled={loading}
-              className="mt-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
-            >
-              {loading ? "Redirecting..." : "Subscribe"}
-            </button>
-          </div>
+          <button className="btn btn-primary" onClick={createCheckout}>Buy Pro</button>
         </div>
       </div>
-    </div>
+    </Layout>
   );
-        }
+}
+export default withAuth(Billing);
