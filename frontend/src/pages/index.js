@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react"; 
-import { Card, CardContent } from "@/components/ui/Card"; // ✅ lowercase "card"
+import { Card, CardContent } from "@/components/ui/card"; // ✅ lowercase "card"
 
 export default function Home() {
   const router = useRouter();
