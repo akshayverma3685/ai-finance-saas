@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/Card";
+import api from "@/utils/api";
 
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
