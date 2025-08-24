@@ -1,46 +1,59 @@
-import withAuth from "@/utils/withAuth";
-import Layout from "@/components/Layout";
-import StatCard from "@/components/StatCard";
-import ChartArea from "@/components/ChartArea";
+import { useEffect, useState } from "react";
+import { getExpenses } from "@/utils/api";
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const chartData = [
-  { name: "Jan", value: 1200 },
-  { name: "Feb", value: 1800 },
-  { name: "Mar", value: 900 },
-  { name: "Apr", value: 2200 },
-  { name: "May", value: 1900 },
-  { name: "Jun", value: 2600 },
-];
+export default function DashboardPage() {
+  const [expenses, setExpenses] = useState([]);
 
-function Dashboard(){
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        const data = await getExpenses();
+        setExpenses(data);
+      } catch (err) {
+        console.error("Failed to fetch expenses:", err);
+      }
+    }
+    fetchExpenses();
+  }, []);
+
   return (
-    <Layout>
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatCard title="Total Spend" value="₹ 2,45,300" sub="+12% vs last month"/>
-        <StatCard title="Subscriptions" value="14" sub="2 due this week"/>
-        <StatCard title="Savings" value="₹ 58,400" sub="Auto-saved this quarter"/>
-        <StatCard title="Alerts" value="3" sub="High spend categories"/>
-      </div>
-      <ChartArea data={chartData}/>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="card p-5">
-          <h3 className="text-lg font-semibold mb-2">Upcoming Bills</h3>
-          <ul className="space-y-2 text-sm text-slate-300">
-            <li className="flex justify-between"><span>Netflix</span><span>₹ 499 • 28 Aug</span></li>
-            <li className="flex justify-between"><span>GitHub</span><span>₹ 900 • 01 Sep</span></li>
-            <li className="flex justify-between"><span>AWS</span><span>₹ 2,300 • 03 Sep</span></li>
-          </ul>
-        </div>
-        <div className="card p-5">
-          <h3 className="text-lg font-semibold mb-2">Top Categories</h3>
-          <ul className="space-y-2 text-sm text-slate-300">
-            <li className="flex justify-between"><span>Cloud</span><span>₹ 72k</span></li>
-            <li className="flex justify-between"><span>SaaS</span><span>₹ 41k</span></li>
-            <li className="flex justify-between"><span>Marketing</span><span>₹ 33k</span></li>
-          </ul>
-        </div>
-      </div>
-    </Layout>
+    <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Stats */}
+      <Card className="rounded-2xl shadow-md">
+        <CardContent className="p-6 text-center">
+          <h2 className="text-lg font-semibold">Total Expenses</h2>
+          <p className="text-2xl font-bold mt-2">
+            ₹{expenses.reduce((sum, e) => sum + (e.amount || 0), 0)}
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-2xl shadow-md">
+        <CardContent className="p-6 text-center">
+          <h2 className="text-lg font-semibold">Transactions</h2>
+          <p className="text-2xl font-bold mt-2">{expenses.length}</p>
+        </CardContent>
+      </Card>
+
+      {/* Chart */}
+      <Card className="rounded-2xl shadow-md md:col-span-2 lg:col-span-3">
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Monthly Overview</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={expenses.map(e => ({
+              name: new Date(e.date).toLocaleDateString("en-US", { month: "short" }),
+              amount: e.amount
+            }))}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="amount" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
-export default withAuth(Dashboard);
