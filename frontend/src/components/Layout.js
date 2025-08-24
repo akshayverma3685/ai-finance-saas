@@ -10,7 +10,7 @@ const navLinks = [
   { name: "Expenses", href: "/expenses" },
 ];
 
-export default function Layout({ children }) {
+import default  Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
