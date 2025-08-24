@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react"; 
+import { TrendingUp, Users, DollarSign, BarChart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card"; // ✅ lowercase "card"
 
 export default function Home() {
@@ -98,4 +98,4 @@ export default function Home() {
       </div>
     </div>
   );
-    }
+        }
