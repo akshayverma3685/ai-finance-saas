@@ -1,8 +1,8 @@
 "use client";
 
-import Navbar from "../components/layout/Navbar";
-import Sidebar from "../components/layout/Sidebar";
-import Footer from "../components/layout/Footer";
+import Navbar from "../components/layout/navbar";
+import Sidebar from "../components/layout/sidebar";
+import Footer from "../components/layout/footer";
 
 export default function DashboardLayout({ children }) {
   return (
