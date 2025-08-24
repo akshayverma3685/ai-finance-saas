@@ -1,38 +1,44 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import dotenv from "dotenv";
-import User from "../models/User.js";
+// src/scripts/seedAdmin.js
+import mongoose from "mongoose"
+import bcrypt from "bcryptjs"
+import dotenv from "dotenv"
+import User from "../models/User.js"
 
-dotenv.config();
+dotenv.config()
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/ai-finance-saas";
-
-const seedAdmin = async () => {
+async function seedAdmin() {
   try {
-    await mongoose.connect(MONGO_URI);
+    // 1. MongoDB se connect
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.DB_NAME,
+    })
+    console.log("✅ MongoDB connected")
 
-    const email = "akshayverma3685@gmail.com";   // ✅ तेरा admin email
-    const password = "Akshay@3686#v@#";          // ✅ तेरा admin password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const existingAdmin = await User.findOne({ email });
-    if (existingAdmin) {
-      console.log("✅ Admin already exists:", email);
-    } else {
-      await User.create({
-        name: "Super Admin",
-        email,
-        password: hashedPassword,
-        role: "admin",
-      });
-      console.log("🎉 Admin created:", email);
+    // 2. Admin user check karo
+    const existing = await User.findOne({ email: process.env.ADMIN_EMAIL })
+    if (existing) {
+      console.log("⚠️ Admin already exists:", existing.email)
+      process.exit(0)
     }
 
-    process.exit(0);
-  } catch (error) {
-    console.error("❌ Error seeding admin:", error);
-    process.exit(1);
-  }
-};
+    // 3. Password hash karo
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
 
-seedAdmin();seedAdmin()
+    // 4. Admin insert karo
+    const admin = await User.create({
+      name: "Super Admin",
+      email: process.env.ADMIN_EMAIL,
+      password: hashedPassword,
+      role: "admin",
+      isPro: true,
+    })
+
+    console.log("🎉 Admin created successfully:", admin.email)
+    process.exit(0)
+  } catch (err) {
+    console.error("❌ Error seeding admin:", err)
+    process.exit(1)
+  }
+}
+
+seedAdmin()
