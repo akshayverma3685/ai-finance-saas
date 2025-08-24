@@ -1,11 +1,9 @@
-// frontend/src/hooks/useNotification.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useNotification(userId) {
   const [notifications, setNotifications] = useState([]);
 
-  // ✅ Fetch backend smart notifications (if available)
   useEffect(() => {
     if (!userId) return;
 
