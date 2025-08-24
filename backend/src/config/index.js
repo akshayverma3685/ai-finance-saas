@@ -14,8 +14,8 @@ function required(key, defaultValue) {
 
 const config = {
   // App
-  env: required("NODE_ENV", "development"),
-  port: required("PORT", 5000),
+  env: process.env.NODE_ENV || "development",
+  port: process.env.PORT || 5000,
   cookieSecret: required("COOKIE_SECRET"),
 
   // Database
