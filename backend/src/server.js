@@ -3,7 +3,7 @@ import http from "http";
 import mongoose from "mongoose";
 import app from "./app.js";
 import config from "./config/index.js";
-import { createAdmin } from "./utils/createAdmin.js";
+import { createAdmin } from "./utils/createAdmin.js"; // ✅ admin creator
 
 const server = http.createServer(app);
 
@@ -17,8 +17,13 @@ const connectDB = async () => {
     });
     console.log("✅ MongoDB Connected");
 
+    // ✅ Yaha admin create call karo
+    await createAdmin();
+
     server.listen(config.port, () => {
-      console.log(`🚀 Server running on http://localhost:${config.port} [${config.env}]`);
+      console.log(
+        `🚀 Server running on http://localhost:${config.port} [${config.env}]`
+      );
     });
   } catch (err) {
     console.error("❌ MongoDB connection failed:", err.message);
