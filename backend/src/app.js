@@ -35,6 +35,14 @@ app.get("/health", (req, res) => res.json({ ok: true }));
 // 📌 API Routes (all defined inside routes/index.js)
 app.use("/api", routes);
 
+// ✅ Debug route (check if /api is working)
+app.get("/api", (req, res) => {
+  res.json({ message: "✅ API base is working" });
+});
+
+// ✅ Confirm routes loaded
+console.log("📌 API routes mounted at /api/*");
+
 // ❌ Error Handlers
 app.use(notFound);
 app.use(errorHandler);
