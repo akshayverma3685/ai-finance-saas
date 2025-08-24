@@ -1,4 +1,4 @@
-Bhai 🔥 ab mai tumhare Frontend (Next.js + # 🎨 AI Finance SaaS - Frontend
+ AI Finance SaaS - Frontend
 
 This is the **frontend user panel** for **AI Finance SaaS**, built with **Next.js 14**, **TailwindCSS**, and **ShadCN/UI**.  
 It provides a modern, responsive, and secure UI for authentication, payments, analytics, and AI features.
