@@ -7,21 +7,23 @@ async function seedAdmin() {
     const adminEmail = config.admin.email;
     const adminPassword = config.admin.password;
 
-    let admin = await User.findOne({ email: adminEmail });
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-    if (!admin) {
-      const hashedPassword = await bcrypt.hash(adminPassword, 10);
-      admin = new User({
-        name: "Admin",
-        email: adminEmail,
-        password: hashedPassword,
-        role: "admin",
-      });
-      await admin.save();
-      console.log(`✅ Admin user created: ${adminEmail}`);
-    } else {
-      console.log(`ℹ️ Admin already exists: ${adminEmail}`);
-    }
+    // Agar user already hai to update ho jaayega, warna create hoga
+    await User.updateOne(
+      { email: adminEmail },
+      {
+        $set: {
+          name: "Admin",
+          email: adminEmail,
+          password: hashedPassword,
+          role: "admin",
+        },
+      },
+      { upsert: true } // upsert = update ya insert
+    );
+
+    console.log(`✅ Admin ensured/updated: ${adminEmail}`);
   } catch (err) {
     console.error("❌ Error seeding admin:", err);
   }
