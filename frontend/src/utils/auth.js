@@ -1,5 +1,14 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-const KEY = "token";
-export const getToken  = () => localStorage.getItem(KEY);
-export const setToken  = (t) => localStorage.setItem(KEY, t);
-export const clearToken= () => localStorage.removeItem(KEY);
+export default function withAuth(Page) {
+  return function Guard(props) {
+    const router = useRouter();
+    useEffect(() => {
+      if (typeof window === "undefined") return;
+      const token = localStorage.getItem("token");
+      if (!token) router.replace("/login");
+    }, [router]);
+    return <Page {...props} />;
+  };
+  }
