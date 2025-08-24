@@ -1,37 +1,38 @@
-import mongoose from "mongoose"
-import bcrypt from "bcryptjs"
-import { config } from "../config/index.js"
-import User from "../models/User.js"
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+import User from "../models/User.js";
+
+dotenv.config();
+
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/ai-finance-saas";
 
 const seedAdmin = async () => {
   try {
-    await mongoose.connect(config.mongoUri)
-    console.log("✅ MongoDB connected")
+    await mongoose.connect(MONGO_URI);
 
-    const email = process.env.ADMIN_EMAIL || "admin@example.com"
-    const password = process.env.ADMIN_PASSWORD || "admin123"
+    const email = "akshayverma3685@gmail.com";   // ✅ तेरा admin email
+    const password = "Akshay@3686#v@#";          // ✅ तेरा admin password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    let user = await User.findOne({ email })
-    if (user) {
-      console.log("⚠️ Admin already exists:", email)
+    const existingAdmin = await User.findOne({ email });
+    if (existingAdmin) {
+      console.log("✅ Admin already exists:", email);
     } else {
-      const hashed = await bcrypt.hash(password, 10)
-      user = new User({
+      await User.create({
         name: "Super Admin",
         email,
-        password: hashed,
-        role: "admin",   // 👈 make sure your User model supports `role`
-        isPro: true
-      })
-      await user.save()
-      console.log("🎉 Admin user created:", email)
+        password: hashedPassword,
+        role: "admin",
+      });
+      console.log("🎉 Admin created:", email);
     }
 
-    process.exit(0)
-  } catch (err) {
-    console.error("❌ Error seeding admin:", err)
-    process.exit(1)
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Error seeding admin:", error);
+    process.exit(1);
   }
-}
+};
 
-seedAdmin()
+seedAdmin();seedAdmin()
