@@ -10,7 +10,7 @@ const navLinks = [
   { name: "Expenses", href: "/expenses" },
 ];
 
-import default  Layout({ children }) {
+export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
@@ -83,4 +83,4 @@ import default  Layout({ children }) {
       </div>
     </div>
   );
-              }
+}
