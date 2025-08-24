@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import withAuth from "@/utils/withAuth";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 
 function loadScript(src){
   return new Promise((resolve)=>{ const s=document.createElement("script"); s.src=src; s.onload=resolve; document.body.appendChild(s); });
