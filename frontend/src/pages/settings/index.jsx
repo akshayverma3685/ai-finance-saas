@@ -1,5 +1,5 @@
 import withAuth from "@/utils/withAuth";
-import Layout from "@/components/Layout";
+import Layout from "@/components/layout";
 
 function Settings(){
   return (
