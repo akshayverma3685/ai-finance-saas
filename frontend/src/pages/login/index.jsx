@@ -1,84 +1,37 @@
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import api from "@/utils/api";
 
-export default function LoginPage() {
+export default function Login(){
   const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const [error,setError]=useState("");
+  const [loading,setLoading]=useState(false);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      await api.login(form.email, form.password); // <-- login API call
-      router.push("/dashboard"); // redirect to dashboard after login
-    } catch (err) {
-      setError(err?.response?.data?.message || "Login failed. Try again.");
-    } finally {
-      setLoading(false);
-    }
+  const submit=async(e)=>{
+    e.preventDefault(); setError(""); setLoading(true);
+    try{
+      await api.login(email,password);
+      router.push("/dashboard");
+    }catch(err){
+      setError(err?.response?.data?.message||"Login failed");
+    }finally{ setLoading(false); }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
-      >
-        <h1 className="text-2xl font-bold mb-6 text-center">Log In</h1>
-
-        {error && (
-          <p className="text-red-500 text-sm mb-4">{error}</p>
-        )}
-
-        <div className="mb-4">
-          <label className="block text-sm mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
+    <div className="min-h-screen grid place-items-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900 via-slate-900 to-slate-950 p-4">
+      <form onSubmit={submit} className="w-full max-w-md card border-slate-700/60 bg-slate-900/50 p-6 backdrop-blur-xl">
+        <h1 className="text-2xl font-semibold">Welcome back</h1>
+        <p className="text-slate-400 text-sm mt-1">Log in to continue</p>
+        {error && <div className="mt-3 rounded-lg border border-red-500/40 bg-red-500/10 p-2 text-sm text-red-300">{error}</div>}
+        <div className="mt-5 space-y-3">
+          <input className="input" placeholder="Email" type="email" value={email} onChange={e=>setEmail(e.target.value)} required/>
+          <input className="input" placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} required/>
         </div>
-
-        <div className="mb-6">
-          <label className="block text-sm mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Logging in..." : "Log In"}
-        </button>
-
-        <p className="text-center text-sm mt-4">
-          Don’t have an account?{" "}
-          <Link href="/signup" className="text-blue-600 hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <button className="btn btn-primary w-full mt-5" disabled={loading}>{loading?"Logging in...":"Log In"}</button>
+        <p className="mt-3 text-xs text-slate-400">Demo admin: use your seeded admin credentials.</p>
       </form>
     </div>
   );
-          }
+}
