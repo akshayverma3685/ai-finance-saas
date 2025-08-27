@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { Navbar, Sidebar, Footer } from "./index";
 import { describe, it, expect } from "vitest";
 
-// Dummy wrapper for rendering
 function Wrapper({ children }) {
   return <div>{children}</div>;
 }
