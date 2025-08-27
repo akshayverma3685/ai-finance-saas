@@ -1,4 +1,3 @@
-// frontend/src/components/ExpenseForm.jsx
 import { useState } from "react";
 
 export default function ExpenseForm({ onAdd }) {
