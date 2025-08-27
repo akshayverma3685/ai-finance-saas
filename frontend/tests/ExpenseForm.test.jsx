@@ -1,4 +1,3 @@
-// frontend/tests/ExpenseForm.test.jsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import ExpenseForm from '../src/components/ExpenseForm';
 
