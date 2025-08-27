@@ -37,7 +37,7 @@ An **Enterprise-grade Finance SaaS** platform powered by:
 
 ### 1️⃣ Clone Repo
 ```bash
-git clone https://github.com/your-username/ai-finance-saas.git
+git clone https://github.com/akshayverma3685/ai-finance-saas.git
 cd ai-finance-saas
 
 2️⃣ Backend Setup
