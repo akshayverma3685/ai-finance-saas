@@ -1,4 +1,3 @@
-// backend/src/billing/billing.service.js
 import Stripe from "stripe";
 import { saveInvoiceToDB } from "./billing.utils.js";
 
