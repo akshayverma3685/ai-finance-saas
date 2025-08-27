@@ -1,17 +1,16 @@
-// src/context/AuthContext.js
 import { createContext, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 
 // Context create
 const AuthContext = createContext();
 
-// ✅ Auth Provider
+//  Auth Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // user = null -> logged out
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Simulate session check (future me API call se replace kar sakte ho)
+  // Simulate session check
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -20,9 +19,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // ✅ Login function
+  //  Login function
   const login = async (email, password) => {
-    // Normally: yaha API call hoga
     if (email === "admin@test.com" && password === "123456") {
       const fakeUser = { id: 1, name: "Admin User", email };
       localStorage.setItem("user", JSON.stringify(fakeUser));
@@ -33,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Logout function
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -47,5 +44,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Custom hook for easy use
 export const useAuth = () => useContext(AuthContext);
