@@ -1,4 +1,3 @@
-// frontend/src/components/ExpensesList.jsx
 import { formatDate } from "../utils/dateHelper";
 
 export default function ExpensesList({ expenses }) {
