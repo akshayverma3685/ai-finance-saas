@@ -1,4 +1,3 @@
-// src/utils/createAdmin.js
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import config from "../config/index.js";
@@ -8,7 +7,6 @@ export async function createAdmin() {
     const adminEmail = config.admin.email;
     const adminPassword = config.admin.password;
 
-    // Check if admin already exists
     let admin = await User.findOne({ email: adminEmail });
 
     if (!admin) {
