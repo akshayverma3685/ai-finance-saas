@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true },
     isPro: { type: Boolean, default: false },
 
-    // 👇 Add this new field
     role: { 
       type: String, 
       enum: ["user", "admin"], 
