@@ -1,9 +1,6 @@
-// src/services/chatbot.service.js
-
 class ChatbotService {
   async getReply(message) {
     try {
-      // Mock response (abhi ke liye static reply)
       return {
         reply: `You said: ${message}`,
       };
