@@ -1,4 +1,3 @@
-// frontend/src/components/ChartDashboard.jsx
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { prepareExpenseChartData } from "../utils/chartHelper";
 
