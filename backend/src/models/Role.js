@@ -9,7 +9,7 @@ const roleSchema = new mongoose.Schema(
     },
     permissions: [
       {
-        type: String, // e.g., "read:reports", "write:expenses"
+        type: String,
       },
     ],
   },
