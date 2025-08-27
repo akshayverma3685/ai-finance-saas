@@ -1,4 +1,3 @@
-// backend/src/utils/generateReport.js
 import PDFDocument from "pdfkit";
 import ExcelJS from "exceljs";
 import fs from "fs";
