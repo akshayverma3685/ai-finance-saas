@@ -10,16 +10,12 @@ import {
 const r = Router()
 r.use(auth)
 
-// GET all notifications
 r.get("/", listNotificationsCtrl)
 
-// POST create new notification
 r.post("/", createNotificationCtrl)
 
-// PATCH mark as read
 r.patch("/:id/read", markReadCtrl)
 
-// DELETE notification
 r.delete("/:id", deleteNotificationCtrl)
 
 export default r
