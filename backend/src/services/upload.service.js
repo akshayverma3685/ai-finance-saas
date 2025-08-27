@@ -4,12 +4,10 @@ import multer from 'multer'
 
 const uploadDir = path.join(process.cwd(), 'uploads')
 
-// ensure uploads folder exists
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true })
 }
 
-// Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir)
@@ -22,11 +20,6 @@ const storage = multer.diskStorage({
 
 export const uploader = multer({ storage })
 
-/**
- * OCR parser (replace with real OCR later)
- */
 export const parseOCR = async (filePath) => {
-  // TODO: integrate Tesseract.js or Vision API
-  // For now, just return dummy text
   return `OCR_TEXT_FROM_FILE: ${path.basename(filePath)}`
 }
