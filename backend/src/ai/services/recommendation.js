@@ -1,9 +1,4 @@
-// src/ai/services/recommendation.js
 
-/**
- * Recommends budgeting and saving strategies
- * based on user expenses and categories.
- */
 export const generateRecommendations = (expenses = []) => {
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
   const food = expenses.filter(e => e.category === "Food").reduce((s, e) => s + e.amount, 0);
