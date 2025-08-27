@@ -1,4 +1,3 @@
-// backend/src/utils/ocrProcessor.js
 import Tesseract from "tesseract.js";
 
 export const extractTextFromImage = async (filePath) => {
