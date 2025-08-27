@@ -9,7 +9,6 @@ async function seedAdmin() {
 
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-    // Agar user already hai to update ho jaayega, warna create hoga
     await User.updateOne(
       { email: adminEmail },
       {
@@ -20,7 +19,7 @@ async function seedAdmin() {
           role: "admin",
         },
       },
-      { upsert: true } // upsert = update ya insert
+      { upsert: true }
     );
 
     console.log(`✅ Admin ensured/updated: ${adminEmail}`);
