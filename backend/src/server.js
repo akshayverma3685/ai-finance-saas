@@ -1,4 +1,3 @@
-// src/server.js
 import http from "http";
 import mongoose from "mongoose";
 import app from "./app.js";
@@ -7,17 +6,15 @@ import { createAdmin } from "./utils/createAdmin.js"; // ✅ admin creator
 
 const server = http.createServer(app);
 
-// ✅ Connect MongoDB before starting server
 const connectDB = async () => {
   try {
     await mongoose.connect(config.db.uri, {
-      dbName: config.db.name, // ✅ env DB_NAME se lega
+      dbName: config.db.name,
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log("✅ MongoDB Connected");
 
-    // ✅ Yaha admin create call karo
     await createAdmin();
 
     server.listen(config.port, () => {
@@ -31,7 +28,6 @@ const connectDB = async () => {
   }
 };
 
-// ✅ Graceful shutdown handler
 const shutdown = (signal) => {
   console.log(`\n🛑 ${signal} received. Shutting down gracefully...`);
   server.close(() => {
