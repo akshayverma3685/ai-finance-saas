@@ -1,4 +1,3 @@
-// backend/src/models/Billing.js
 import mongoose from "mongoose";
 
 const billingSchema = new mongoose.Schema({
