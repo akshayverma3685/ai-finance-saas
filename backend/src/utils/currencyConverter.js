@@ -1,4 +1,3 @@
-// backend/src/utils/currencyConverter.js
 import axios from "axios";
 
 export const convertCurrency = async (amount, from, to) => {
