@@ -1,7 +1,4 @@
 services:
-  # -------------------------
-  # Backend (Express + MongoDB)
-  # -------------------------
   - type: web
     name: ai-finance-backend
     env: node
@@ -48,10 +45,7 @@ services:
         sync: false
       - key: SENDGRID_API_KEY
         sync: false
-
-  # -------------------------
   # Frontend (Next.js)
-  # -------------------------
   - type: web
     name: ai-finance-frontend
     env: node
