@@ -1,4 +1,3 @@
-// backend/src/utils/stockApi.js
 import axios from "axios";
 
 const API_URL = "https://finnhub.io/api/v1/quote";
