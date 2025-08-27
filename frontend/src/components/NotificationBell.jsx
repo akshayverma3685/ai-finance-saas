@@ -1,4 +1,3 @@
-// frontend/src/components/NotificationBell.jsx
 import { useState } from "react";
 
 export default function NotificationBell({ notifications }) {
