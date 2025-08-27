@@ -1,4 +1,3 @@
-// backend/src/controllers/ocr.controller.js
 import { extractTextFromImage } from "../services/ocr.service.js";
 
 export const uploadAndExtractOCR = async (req, res) => {
