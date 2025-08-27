@@ -16,12 +16,6 @@ const razor = () => {
   return new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_KEY_SECRET })
 }
 
-/**
- * Create an order at Razorpay and a local Payment record
- * @param {ObjectId} userId
- * @param {number} amountINR  e.g. 199
- * @param {object} notes
- */
 export const createOrder = async (userId, amountINR, notes = {}) => {
   if (!amountINR || amountINR <= 0) throw new Error('Invalid amount')
   const rz = razor()
@@ -39,10 +33,6 @@ export const createOrder = async (userId, amountINR, notes = {}) => {
   return { order, payment }
 }
 
-/**
- * Verify Razorpay signature returned on success page
- * Docs: expectedSignature = HMAC_SHA256(order_id + '|' + payment_id, KEY_SECRET)
- */
 export const verifySignature = (orderId, paymentId, signature) => {
   const { RAZORPAY_KEY_SECRET } = ensureEnv()
   const body = `${orderId}|${paymentId}`
@@ -50,10 +40,6 @@ export const verifySignature = (orderId, paymentId, signature) => {
   return expected === signature
 }
 
-/**
- * Mark a payment as paid (after verifying signature)
- * Also upgrades the user to Pro
- */
 export const markPaid = async (userId, { orderId, paymentId }) => {
   const payment = await Payment.findOneAndUpdate(
     { user: userId, orderId },
@@ -61,16 +47,11 @@ export const markPaid = async (userId, { orderId, paymentId }) => {
     { new: true }
   )
   if (!payment) throw new Error('Payment not found for this user/order')
-
-  // Upgrade user to Pro
+  
   await User.findByIdAndUpdate(userId, { isPro: true })
   return payment
 }
 
-/**
- * Optional: handle Razorpay webhook (e.g., payment.authorized / captured)
- * Remember to configure webhook secret & verify its signature (x-razorpay-signature)
- */
 export const verifyWebhook = (payloadRaw, signature, webhookSecret) => {
   const expected = crypto.createHmac('sha256', webhookSecret).update(payloadRaw).digest('hex')
   return expected === signature
