@@ -6,7 +6,6 @@ export default function Notifications() {
   const [billDate, setBillDate] = useState("");
 
   const save = () => {
-    // call your backend preference save endpoint if available
     alert("Preferences saved (demo). Backend can store thresholds & schedules.");
   };
 
