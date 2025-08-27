@@ -6,7 +6,6 @@ import { ocrUploadCtrl } from '../controllers/upload.controller.js'
 const r = Router()
 r.use(auth)
 
-// OCR upload (form-data: file)
 r.post('/ocr', uploader.single('file'), ocrUploadCtrl)
 
 export default r
