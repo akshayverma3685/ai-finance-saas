@@ -1,8 +1,4 @@
-// src/ai/services/fraudDetection.js
-/**
- * Fraud detection based on rule-engine + anomaly detection.
- * In real-world: integrate ML model.
- */
+
 export const detectFraud = (transactions) => {
   const alerts = [];
 
