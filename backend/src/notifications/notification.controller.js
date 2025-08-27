@@ -1,6 +1,5 @@
 const notificationService = require("./notification.service");
 
-// Create Notification
 exports.createNotification = async (req, res) => {
   try {
     const notification = await notificationService.create(req.body);
@@ -10,7 +9,6 @@ exports.createNotification = async (req, res) => {
   }
 };
 
-// Get All Notifications
 exports.getNotifications = async (req, res) => {
   try {
     const notifications = await notificationService.findAll();
@@ -20,7 +18,6 @@ exports.getNotifications = async (req, res) => {
   }
 };
 
-// Mark Notification as Read
 exports.markAsRead = async (req, res) => {
   try {
     const updated = await notificationService.markAsRead(req.params.id);
