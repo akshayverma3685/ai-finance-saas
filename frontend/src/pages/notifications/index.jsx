@@ -1,11 +1,10 @@
-// frontend/src/pages/Notifications.jsx
 import React, { useState, useEffect } from "react";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Mock notifications (later replace with API call if needed)
+    // Mock notification
     setNotifications([
       { id: 1, msg: "⚡ You spent 80% of your Food budget" },
       { id: 2, msg: "💡 Pro tip: Save 10% of income for investments" }
