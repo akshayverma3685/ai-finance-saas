@@ -1,4 +1,3 @@
-// frontend/src/pages/Analytics.jsx
 import React from "react";
 
 const Analytics = () => {
