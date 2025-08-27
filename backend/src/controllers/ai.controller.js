@@ -1,4 +1,3 @@
-// src/controllers/ai.controller.js
 import { chatbotReply } from "../ai/services/chatbotService.js";
 import { detectFraud } from "../ai/services/fraudDetection.js";
 import { generateRecommendations } from "../ai/services/recommendation.js";
