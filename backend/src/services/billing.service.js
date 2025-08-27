@@ -31,12 +31,10 @@ export const handleWebhook = async (req) => {
     throw new Error(err.message);
   }
 
-  // Handle event types
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     console.log("✅ Payment successful:", session);
 
-    // Save invoice/subscription in DB
     await saveInvoiceToDB(session);
   }
 
