@@ -1,4 +1,3 @@
-// frontend/src/components/ChatbotWidget.jsx
 import { useState } from "react";
 
 export default function ChatbotWidget() {
