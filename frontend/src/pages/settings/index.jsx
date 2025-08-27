@@ -1,4 +1,3 @@
-// frontend/src/pages/Settings.jsx
 import { useState } from "react";
 
 export default function Settings() {
