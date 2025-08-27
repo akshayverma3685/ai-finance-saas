@@ -1,11 +1,10 @@
-// frontend/src/hooks/useNotification.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useNotification(userId) {
   const [notifications, setNotifications] = useState([]);
 
-  // ✅ Fetch backend smart notifications (if available)
+  //  Fetch backend smart notifications
   useEffect(() => {
     if (!userId) return;
 
@@ -22,12 +21,11 @@ export default function useNotification(userId) {
 
     fetchNotifications();
 
-    // Refetch every 5 min
     const interval = setInterval(fetchNotifications, 300000);
     return () => clearInterval(interval);
   }, [userId]);
 
-  // ✅ Local smart reminders (fallback if backend not set up yet)
+  // ✅ Local smart reminders
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
@@ -43,12 +41,12 @@ export default function useNotification(userId) {
       if (msg) {
         setNotifications((prev) => [...prev, { id: Date.now(), msg }]);
       }
-    }, 60000); // check every 1 min
+    }, 60000);
 
     return () => clearInterval(timer);
   }, []);
 
-  // ✅ Dismiss notification
+  //  Dismiss notification
   const removeNotification = (id) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
