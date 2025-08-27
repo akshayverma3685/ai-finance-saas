@@ -1,4 +1,3 @@
-// frontend/src/components/ReportDownload.jsx
 export default function ReportDownload({ reports }) {
   return (
     <div className="p-4 bg-white shadow rounded">
