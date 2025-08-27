@@ -1,4 +1,3 @@
-// backend/tests/currencyConverter.test.js
 import axios from 'axios';
 import { convertCurrency } from '../src/utils/currencyConverter.js';
 
