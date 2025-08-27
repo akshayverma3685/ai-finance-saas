@@ -1,4 +1,3 @@
-// frontend/tests/Dashboard.test.jsx
 import { render, screen } from '@testing-library/react';
 import Dashboard from '../src/components/Dashboard';
 
